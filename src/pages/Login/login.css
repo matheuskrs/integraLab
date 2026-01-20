@@ -1,0 +1,118 @@
+.login-card {
+  width: 90%;
+  max-width: 400px;
+  background: #fff;
+  padding: 32px;
+  border-radius: 8px;
+  box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.login-logo {
+  margin-bottom: 16px;
+  max-width: 300px;
+  width: 90%;
+}
+
+.field {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.field label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: rgb(27, 27, 27);
+}
+
+.field input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: white;
+  color: black;
+}
+
+.field input::placeholder {
+  color: #ccc;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: #1e6bd6;
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-input-container input {
+  width: 100%;
+  padding-right: 36px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: rgb(119, 119, 119);
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.remember-container {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+#check-remember {
+  border-radius: 6px;
+}
+.remember {
+  display: flex;
+  gap: 6px;
+}
+
+.forgot {
+  color: #1f77f1;
+  text-decoration: none;
+  transition: 200ms ease-in-out;
+}
+
+.forgot:hover {
+  color: #589eff;
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background: #1e6bd6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+  outline: none !important;
+}
+
+.login-button:hover {
+  opacity: 0.85;
+}
+
+.login-footer {
+  margin-top: 24px;
+  font-size: 12px;
+  color: #888;
+}

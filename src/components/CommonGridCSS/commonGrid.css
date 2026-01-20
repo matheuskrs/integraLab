@@ -1,0 +1,59 @@
+.MuiDataGrid-cell {
+  border-right: 2px solid gainsboro;
+}
+.grid-wrapper {
+  background: #fff;
+  border-radius: 10px;
+  border: 2px solid gainsboro;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  max-width: 2000px;
+  overflow: clip;
+  width: 90%;
+}
+.css-mwkct3-MuiDataGrid-root .MuiDataGrid-columnSeparator--sideRight {
+  right: 0px !important;
+}
+.css-mwkct3-MuiDataGrid-root .MuiDataGrid-cell {
+  border-top: none !important;
+}
+.css-mwkct3-MuiDataGrid-root .MuiDataGrid-columnSeparator {
+  display: block;
+  color: gainsboro;
+  width: 1px;
+  background-color: gainsboro !important;
+}
+.css-1vigakz-MuiDataGrid-virtualScroller {
+  border: 2px solid gainsboro;
+  border-radius: 10px;
+  overflow: clip;
+}
+.grid-actions {
+  display: flex;
+  gap: 8px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.grid-actions button {
+  background: transparent;
+  border: 2px solid gainsboro;
+  cursor: pointer;
+  color: #555;
+  font-size: 14px;
+  padding: 6px;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  transition: 100ms ease-in-out;
+}
+
+.grid-actions button.danger {
+  color: #d32f2f;
+}
+
+.grid-actions button:hover {
+  color: #1e6bd6;
+  border-color: #1e6bd6;
+  transform: scale(1.05);
+}

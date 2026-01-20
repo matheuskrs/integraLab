@@ -1,0 +1,44 @@
+.access-container {
+  padding: 40px 0px 0px 140px;
+}
+
+.access-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.access-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.access-search {
+  width: 320px;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.access-search:focus {
+  outline: none;
+  border-color: #1e6bd6;
+}
+
+.status-btn {
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  user-select: none;
+  cursor: default;
+  width: 100%;
+}
