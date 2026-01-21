@@ -1,10 +1,12 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { ptBR } from "@mui/x-data-grid/locales";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "../../components/CommonGridCSS/commonGrid.css";
 import "./accessManagement.css";
-
+import { useMediaQuery } from "@mui/material";
+import { Select, MenuItem } from "@mui/material";
+import { useState } from "react";
 export default function AccessManagement() {
   const rows = [
     {
@@ -32,38 +34,37 @@ export default function AccessManagement() {
       status: { id: 2, label: "Inativo", color: "#fd2a2a" },
     },
   ];
-
-  const columns = [
+  const isMobile = useMediaQuery("(max-width:700px)");
+  const desktopColumns = [
     {
       field: "perfil",
       headerName: "Perfil",
-      flex: 1.5,
-      minWidth: 150,
+      flex: 1,
+      minWidth: isMobile ? 100 : 120,
     },
     {
       field: "descricao",
       headerName: "Descrição",
-      flex: 2,
+      flex: 1,
       minWidth: 220,
     },
     {
       field: "permissoesAtivas",
       headerName: "Permissões ativas",
-      flex: 1,
       minWidth: 160,
       renderCell: (params) => <span>{params.value} permissões</span>,
     },
     {
       field: "dataCriacao",
       headerName: "Data de criação",
-      flex: 1,
       minWidth: 150,
     },
     {
       field: "status",
       headerName: "Status",
       flex: 1,
-      minWidth: 120,
+      minWidth: 80,
+      maxWidth: 160,
       renderCell: (params) => {
         const status = params.value;
         return (
@@ -79,8 +80,7 @@ export default function AccessManagement() {
     {
       field: "actions",
       headerName: "Ações",
-      flex: 1,
-      minWidth: 120,
+      minWidth: 80,
       sortable: false,
       filterable: false,
       renderCell: () => (
@@ -96,24 +96,45 @@ export default function AccessManagement() {
     },
   ];
 
+  const mobileColumns = [
+    desktopColumns.find((col) => col.field === "perfil"),
+    desktopColumns.find((col) => col.field === "status"),
+    desktopColumns.find((col) => col.field === "actions"),
+  ];
+
+  const [status, setStatus] = useState(0);
   return (
-    <div className="access-container">
+    <div>
       <h1 className="access-title">Perfis de Acesso</h1>
       <p className="access-subtitle">
         Gerencie os perfis e permissões de acesso do sistema
       </p>
-
-      <input
-        type="text"
-        className="access-search"
-        placeholder="Buscar perfil..."
-      />
-
       <div className="grid-wrapper">
+        <div className="grid-header-wrapper">
+          <input
+            type="text"
+            className="access-search"
+            placeholder="Buscar perfil..."
+            name="access-search"
+          />
+          {!isMobile && (
+            <Select className="select-user-state-list" size="small" value={status} onChange={(e) => setStatus(e.target.value)}>
+              <MenuItem value={0}>Todos os status</MenuItem>
+              <MenuItem value={1}>Ativo</MenuItem>
+              <MenuItem value={2}>Inativo</MenuItem>
+            </Select>
+     
+          )}
+          {!isMobile && (
+            <button className="btn-new-profile">
+              Novo perfil
+            </button>
+          )}
+        </div>
         <DataGrid
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
           rows={rows}
-          columns={columns}
+          columns={isMobile ? mobileColumns : desktopColumns}
           rowSelection={false}
           disableRowSelectionOnClick
           disableColumnMenu
@@ -123,43 +144,15 @@ export default function AccessManagement() {
               paginationModel: { pageSize: 10, page: 0 },
             },
           }}
-          sx={{
-            border: "none",
-            fontSize: 14,
-
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "#f7f8fa",
-              fontWeight: 600,
-              borderTop: "1px solid #e0e0e0",
-            },
-
-            "& .MuiDataGrid-columnSeparator": {
-              display: "block",
-              color: "#e0e0e0",
-            },
-
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-
-            "& .MuiDataGrid-row:nth-of-type(even)": {
-              backgroundColor: "#fafafa",
-            },
-
-            "& .MuiDataGrid-row:hover": {
-              backgroundColor: "#f1f5ff",
-            },
-
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "1px solid #e0e0e0",
-            },
-
-            "& .MuiDataGrid-filler": {
-              display: "none",
-            },
-          }}
         />
       </div>
+      {isMobile && (
+        <div className="wrapper-btn-new-profile-mobile">
+          <button className="btn-new-profile-mobile">
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -139,6 +139,7 @@
 .sidebar.collapsed .sidebar-nav li {
   justify-content: center;
   padding: 12px 0;
+  padding-right: 3px;
 }
 
 .sidebar.collapsed .sidebar-nav svg {

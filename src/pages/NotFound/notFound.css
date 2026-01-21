@@ -1,0 +1,34 @@
+*{
+  user-select: none;
+}
+
+.notfound-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.notfound-container h1 {
+  font-size: 96px;
+  margin: 0;
+}
+
+.notfound-container button {
+  margin-top: 16px;
+  padding: 10px 16px;
+  cursor: pointer;
+  background-color: var(--main-color);
+  color: white;
+  border-radius: 10px;
+  border: none;
+  transition: 150ms ease-in-out;
+}
+
+.notfound-container button:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}

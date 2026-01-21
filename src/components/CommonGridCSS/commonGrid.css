@@ -1,6 +1,13 @@
-.MuiDataGrid-cell {
-  border-right: 2px solid gainsboro;
+.MuiDataGrid-cell:not(:last-of-type) {
+  border-right: 1px solid gainsboro;
 }
+
+.grid-header-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .grid-wrapper {
   background: #fff;
   border-radius: 10px;
@@ -9,24 +16,16 @@
   max-width: 2000px;
   overflow: clip;
   width: 90%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.css-mwkct3-MuiDataGrid-root .MuiDataGrid-columnSeparator--sideRight {
-  right: 0px !important;
+
+.grid-wrapper * {
+  outline: none !important;
 }
-.css-mwkct3-MuiDataGrid-root .MuiDataGrid-cell {
-  border-top: none !important;
-}
-.css-mwkct3-MuiDataGrid-root .MuiDataGrid-columnSeparator {
-  display: block;
-  color: gainsboro;
-  width: 1px;
-  background-color: gainsboro !important;
-}
-.css-1vigakz-MuiDataGrid-virtualScroller {
-  border: 2px solid gainsboro;
-  border-radius: 10px;
-  overflow: clip;
-}
+
 .grid-actions {
   display: flex;
   gap: 8px;

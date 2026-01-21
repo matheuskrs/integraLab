@@ -1,5 +1,5 @@
 .access-container {
-  padding: 40px 0px 0px 140px;
+  padding: 40px 0px 0px 110px;
 }
 
 .access-title {
@@ -15,12 +15,41 @@
 }
 
 .access-search {
-  width: 320px;
-  padding: 12px 14px;
+  padding: 13px 14px;
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 14px;
-  margin-bottom: 20px;
+  flex: 1.5;
+}
+
+.select-user-state-list {
+  border-radius: 6px;
+  font-size: 14px;
+  flex: 1;
+  color: gray;
+  max-width: 300px;
+  border: 2px solid #ddd;
+}
+
+.select-user-state-list * {
+  border: none !important
+}
+
+.btn-new-profile {
+  background: var(--main-color);
+  border-radius: 5px;
+  color: white;
+  border: none;
+  padding: 13px 14px;
+  min-width: 90px;
+  white-space: nowrap;
+  flex: 0.3;
+  cursor: pointer;
+  transition:200ms ease-in-out;
+}
+
+.btn-new-profile:hover {
+  opacity:0.9;
 }
 
 .access-search:focus {
@@ -41,4 +70,19 @@
   user-select: none;
   cursor: default;
   width: 100%;
+}
+
+.wrapper-btn-new-profile-mobile {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
+
+.btn-new-profile-mobile {
+  border-radius: 50%;
+  border: none;
+  background: var(--main-color);
+  color: white;
+  padding: 10px;
+  font-size: 30px;
 }
