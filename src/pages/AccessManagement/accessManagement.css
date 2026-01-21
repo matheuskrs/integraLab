@@ -25,7 +25,7 @@
 
 .access-search:focus {
   outline: none;
-  border-color: #1e6bd6;
+  border-color: var(--main-color);
 }
 
 .status-btn {

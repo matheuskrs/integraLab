@@ -42,7 +42,7 @@
 
 .field input:focus {
   outline: none;
-  border-color: #1e6bd6;
+  border-color: var(--main-color);
 }
 
 .password-input-container {
@@ -73,8 +73,10 @@
 
 .remember-container {
   display: flex;
-  gap: 6px;
+  gap: 3px;
+  align-items: center;
   flex-wrap: nowrap;
+  justify-content: center;
 }
 #check-remember {
   border-radius: 6px;
@@ -97,7 +99,7 @@
 .login-button {
   width: 100%;
   padding: 12px;
-  background: #1e6bd6;
+  background: var(--main-color);
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -109,6 +111,10 @@
 
 .login-button:hover {
   opacity: 0.85;
+}
+
+.input-error {
+  border: 1px solid #e53935 !important;
 }
 
 .login-footer {

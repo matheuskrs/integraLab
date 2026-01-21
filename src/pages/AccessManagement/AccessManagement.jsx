@@ -154,7 +154,6 @@ export default function AccessManagement() {
               borderTop: "1px solid #e0e0e0",
             },
 
-            /* 🔥 REMOVE A COLUNA FANTASMA */
             "& .MuiDataGrid-filler": {
               display: "none",
             },

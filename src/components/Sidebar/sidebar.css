@@ -117,6 +117,15 @@
   transition: 0.1s ease-in-out;
 }
 
+.sidebar-nav a {
+  text-decoration: none;
+  color: black;
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
 .sidebar-nav li.active {
   background: rgba(30, 107, 214, 0.01);
   border-left: 3px solid #5398f8;
@@ -124,7 +133,7 @@
 
 .sidebar-nav li:hover {
   background: rgba(30, 107, 214, 0.08);
-  border-left: 3px solid #1e6bd6;
+  border-left: 3px solid var(--main-color);
 }
 
 .sidebar.collapsed .sidebar-nav li {
@@ -186,7 +195,7 @@
 .sidebar-help:hover,
 .sidebar-logout:hover {
   background: rgba(30, 107, 214, 0.08);
-  border-left-color: #1e6bd6;
+  border-left-color: var(--main-color);
 }
 
 .sidebar-bottom {
