@@ -1,4 +1,4 @@
-import "./login.css";
+import styles from "./login.module.css";
 import logo from "../../assets/integraLabLogo.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,15 +12,16 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isEmailValid = emailRegex.test(email);
-  const isFormValid =
-    email.trim() !== "" && isEmailValid && password.trim() !== "";
+  const isFormValid = email.trim() !== "" && isEmailValid && password.trim() !== "";
   const togglePassword = () => setShowPassword(!showPassword);
+
   const handleLogin = (e) => {
     e.preventDefault();
     if (!isFormValid) {
-      var message = "Verifique os campos preenchidos e tente novamente.";
+      let message = "Verifique os campos preenchidos e tente novamente.";
       if (!isEmailValid)
         message =
           "O formato do email está inválido, verifique e tente novamente.";
@@ -34,11 +35,13 @@ export default function LoginPage() {
   const copyToClipboard = () => {
     navigator.clipboard.writeText("suporte@unesp.edu.br");
     toast.success("Sucesso", "Copiado para a área de transferência!");
-  }
+  };
+
   return (
-    <form className="login-card" onSubmit={handleLogin}>
-      <img src={logo} alt="IntegraLab" className="login-logo" />
-      <div className="field">
+    <form className={styles["login-card"]} onSubmit={handleLogin}>
+      <img src={logo} alt="IntegraLab" className={styles["login-logo"]} />
+
+      <div className={styles.field}>
         <label>E-mail</label>
         <input
           type="email"
@@ -46,14 +49,14 @@ export default function LoginPage() {
           placeholder="seu@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className={email && !isEmailValid ? "input-error" : ""}
+          className={email && !isEmailValid ? styles["input-error"] : ""}
           autoComplete="email"
         />
       </div>
 
-      <div className="field password-field">
+      <div className={`${styles.field} ${styles["password-field"]}`}>
         <label>Senha</label>
-        <div className="password-input-container">
+        <div className={styles["password-input-container"]}>
           <input
             type={showPassword ? "text" : "password"}
             tabIndex={2}
@@ -62,42 +65,41 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
           />
-          <span
-            className="toggle-password"
-            onClick={togglePassword}
-          >
+          <span className={styles["toggle-password"]} onClick={togglePassword}>
             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
           </span>
         </div>
       </div>
 
-      <div className="login-options">
-        <div className="remember-container">
+      <div className={styles["login-options"]}>
+        <div className={styles["remember-container"]}>
           <input
             type="checkbox"
             name="check-remember"
             id="check-remember"
             tabIndex={4}
           />
-          <label className="remember" htmlFor="check-remember">
+          <label className={styles.remember} htmlFor="check-remember">
             Lembrar-me
           </label>
         </div>
 
-        <a href="#" className="forgot" tabIndex={5}>
+        <a href="#" className={styles.forgot} tabIndex={5}>
           Esqueci minha senha
         </a>
       </div>
 
-      <button className="login-button" onClick={handleLogin} tabIndex={6}>
+      <button className={styles["login-button"]} type="submit" tabIndex={6}>
         Entrar
       </button>
 
-      <footer className="login-footer">
-        Versão 1.0.0 · 
-        <span className="footer-support-email" onClick={copyToClipboard}> 
-          suporte@unesp.edu.br
-          <FontAwesomeIcon icon={faCopy}/>
+      <footer className={styles["login-footer"]}>
+        Versão 1.0.0 ·{" "}
+        <span
+          className={styles["footer-support-email"]}
+          onClick={copyToClipboard}
+        >
+          suporte@unesp.edu.br <FontAwesomeIcon icon={faCopy} />
         </span>
       </footer>
     </form>

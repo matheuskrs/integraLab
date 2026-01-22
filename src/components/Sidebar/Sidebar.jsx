@@ -79,7 +79,7 @@ export default function Sidebar({ activePage }) {
   }, []);
   const handleLogout = () => {
     navigator("/");
-  }
+  };
   return (
     <aside
       ref={sidebarRef}
@@ -102,7 +102,12 @@ export default function Sidebar({ activePage }) {
         <nav className="sidebar-nav">
           <ul>
             {MENU_ITEMS.map((item) => (
-              <li key={item.id} title={item.label} className={activePage === item.id ? "active" : ""} onClick={() => navigator(item.path)}>
+              <li
+                key={item.id}
+                title={item.label}
+                className={activePage === item.id ? "active" : ""}
+                onClick={() => navigator(item.path)}
+              >
                 <FontAwesomeIcon icon={item.icon} />
                 {!collapsed && item.label}
               </li>

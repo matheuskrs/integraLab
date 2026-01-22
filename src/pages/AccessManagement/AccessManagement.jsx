@@ -3,6 +3,7 @@ import { ptBR } from "@mui/x-data-grid/locales";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "../../components/CommonGridCSS/commonGrid.css";
+import Modal from "../../components/Modal/Modal";
 import "./accessManagement.css";
 import { useMediaQuery } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
@@ -103,6 +104,8 @@ export default function AccessManagement() {
   ];
 
   const [status, setStatus] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <div>
       <h1 className="access-title">Perfis de Acesso</h1>
@@ -118,15 +121,22 @@ export default function AccessManagement() {
             name="access-search"
           />
           {!isMobile && (
-            <Select className="select-user-state-list" size="small" value={status} onChange={(e) => setStatus(e.target.value)}>
+            <Select
+              className="select-user-state-list"
+              size="small"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
               <MenuItem value={0}>Todos os status</MenuItem>
               <MenuItem value={1}>Ativo</MenuItem>
               <MenuItem value={2}>Inativo</MenuItem>
             </Select>
-     
           )}
           {!isMobile && (
-            <button className="btn-new-profile">
+            <button
+              className="btn-new-profile"
+              onClick={() => setOpenModal(true)}
+            >
               Novo perfil
             </button>
           )}
@@ -148,11 +158,75 @@ export default function AccessManagement() {
       </div>
       {isMobile && (
         <div className="wrapper-btn-new-profile-mobile">
-          <button className="btn-new-profile-mobile">
+          <button
+            className="btn-new-profile-mobile"
+            onClick={() => setOpenModal(true)}
+          >
             <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
       )}
+      <Modal
+        open={openModal}
+        title="Novo perfil de acesso"
+        onClose={() => setOpenModal(false)}
+      >
+        <form className="modal-form">
+          <div className="field">
+            <label>Nome</label>
+            <input type="text" placeholder="Nome do Perfil" />
+          </div>
+
+          <div className="field">
+            <label>Descrição</label>
+            <input type="text" placeholder="Descrição do Perfil" />
+          </div>
+
+          <div className="field">
+            <div className="switch-row">
+              <label className="switch">
+                <input type="checkbox" defaultChecked for="switch" />
+                <span className="slider" />
+              </label>
+              <span className="switch-label">Ativo</span>
+            </div>
+
+            <div className="permissions-box">
+              <label className="perm-item">
+                <input type="checkbox" /> Gestão de usuários
+              </label>
+              <label className="perm-item">
+                <input type="checkbox" /> Gestão de sistemas
+              </label>
+              <label className="perm-item">
+                <input type="checkbox" /> Feed de notícias
+              </label>
+              <label className="perm-item">
+                <input type="checkbox" /> Gestão de laboratórios
+              </label>
+              <label className="perm-item">
+                <input type="checkbox" /> Downloads
+              </label>
+              <label className="perm-item">
+                <input type="checkbox" /> Gestão de acessos
+              </label>
+            </div>
+          </div>
+
+          <div className="modal-actions">
+            <button type="submit" className="btn-submit-profile">
+              Salvar
+            </button>
+            <button
+              type="button"
+              className="btn-cancel"
+              onClick={() => setOpenModal(false)}
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
