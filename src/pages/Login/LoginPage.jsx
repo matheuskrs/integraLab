@@ -5,8 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../contexts/useToast";
+import { useGlobalLoading } from "../../components/Loading/GlobalLoadingContext";
+
 
 export default function LoginPage() {
+const { showLoading, hideLoading } = useGlobalLoading();
   const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -19,24 +22,26 @@ export default function LoginPage() {
   const togglePassword = () => setShowPassword(!showPassword);
 
   const handleLogin = (e) => {
+    showLoading("Autenticando e redirecionando");
     e.preventDefault();
     if (!isFormValid) {
       let message = "Verifique os campos preenchidos e tente novamente.";
       if (!isEmailValid)
-        message =
-          "O formato do email está inválido, verifique e tente novamente.";
+        message = "O formato do email está inválido, verifique e tente novamente.";
       toast.error("Erro", message);
       return;
     }
-    toast.success("Sucesso", "Autenticação concluída com sucesso!");
     navigate("/access");
+    setTimeout(() => {
+      toast.success("Sucesso", "Autenticação concluída com sucesso!");
+      hideLoading();
+    }, 1500)
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText("suporte@unesp.edu.br");
     toast.success("Sucesso", "Copiado para a área de transferência!");
   };
-
   return (
     <form className={styles["login-card"]} onSubmit={handleLogin}>
       <img src={logo} alt="IntegraLab" className={styles["login-logo"]} />

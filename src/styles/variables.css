@@ -1,3 +1,6 @@
 :root {
   --main-color: #1e6bd6;
+  --main-color-text: white;
+  --secondary-color: white;
+  --secondary-color-text: black;
 }

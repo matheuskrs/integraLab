@@ -210,3 +210,10 @@
   gap: 8px;
   font-size: 14px;
 }
+
+
+@media(max-width: 700px){
+  .permissions-box{
+    grid-template-columns: 1fr;
+  }
+}

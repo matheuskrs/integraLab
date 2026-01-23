@@ -16,7 +16,7 @@ export default function AccessManagement() {
       descricao: "Acesso total ao sistema",
       permissoesAtivas: 3,
       dataCriacao: "2025-01-15",
-      status: { id: 1, label: "Ativo", color: "#24b92b" },
+      status: true,
     },
     {
       id: 2,
@@ -24,7 +24,7 @@ export default function AccessManagement() {
       descricao: "Gerencia Laboratórios e usuários",
       permissoesAtivas: 2,
       dataCriacao: "2025-02-10",
-      status: { id: 1, label: "Ativo", color: "#24b92b" },
+      status: true,
     },
     {
       id: 3,
@@ -32,9 +32,10 @@ export default function AccessManagement() {
       descricao: "Acesso aos sistemas e downloads",
       permissoesAtivas: 2,
       dataCriacao: "2025-03-05",
-      status: { id: 2, label: "Inativo", color: "#fd2a2a" },
+      status: false,
     },
   ];
+
   const isMobile = useMediaQuery("(max-width:700px)");
   const desktopColumns = [
     {
@@ -67,17 +68,21 @@ export default function AccessManagement() {
       minWidth: 80,
       maxWidth: 160,
       renderCell: (params) => {
-        const status = params.value;
+        const isActive = Boolean(params.value);
+
         return (
           <span
             className="status-btn"
-            style={{ backgroundColor: status.color }}
+            style={{
+              backgroundColor: isActive ? "#24b92b" : "#fd2a2a",
+            }}
           >
-            {status.label}
+            {isActive ? "Ativo" : "Inativo"}
           </span>
         );
       },
     },
+
     {
       field: "actions",
       headerName: "Ações",
@@ -185,7 +190,7 @@ export default function AccessManagement() {
           <div className="field">
             <div className="switch-row">
               <label className="switch">
-                <input type="checkbox" defaultChecked for="switch" />
+                <input type="checkbox" defaultChecked htmlFor="switch" />
                 <span className="slider" />
               </label>
               <span className="switch-label">Ativo</span>

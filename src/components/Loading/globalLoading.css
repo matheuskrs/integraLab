@@ -1,0 +1,43 @@
+#global-loading {
+  position: fixed;
+  inset: 0;
+  background: var(--main-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  opacity: 1;
+  visibility: visible;
+  z-index: 99999;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+}
+
+#global-loading.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(231, 192, 73, 0.3);
+  border-top-color: var(--secondary-color);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+.loading-text {
+  margin-top: 12px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
