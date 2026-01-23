@@ -22,7 +22,6 @@ const { showLoading, hideLoading } = useGlobalLoading();
   const togglePassword = () => setShowPassword(!showPassword);
 
   const handleLogin = (e) => {
-    showLoading("Autenticando e redirecionando");
     e.preventDefault();
     if (!isFormValid) {
       let message = "Verifique os campos preenchidos e tente novamente.";
@@ -31,6 +30,7 @@ const { showLoading, hideLoading } = useGlobalLoading();
       toast.error("Erro", message);
       return;
     }
+    showLoading("Autenticando e redirecionando");
     navigate("/access");
     setTimeout(() => {
       toast.success("Sucesso", "Autenticação concluída com sucesso!");
