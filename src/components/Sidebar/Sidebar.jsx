@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./sidebar.css";
-import logo from "../../assets/integraLabLogo.png";
-import miniLogo from "../../assets/integraLabMiniLogo.png";
+import logo from "../../assets/SInLabsLogo.png";
+import miniLogo from "../../assets/SInLabsMiniLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -95,7 +95,7 @@ export default function Sidebar({ activePage }) {
         <div className="logo-container">
           <img
             src={collapsed ? miniLogo : logo}
-            alt="IntegraLab"
+            alt="SInLabs"
             className="sidebar-logo"
           />
         </div>

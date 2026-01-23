@@ -1,5 +1,5 @@
 import styles from "./login.module.css";
-import logo from "../../assets/integraLabLogo.png";
+import logo from "../../assets/SInLabsLogo.png";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -44,7 +44,7 @@ const { showLoading, hideLoading } = useGlobalLoading();
   };
   return (
     <form className={styles["login-card"]} onSubmit={handleLogin}>
-      <img src={logo} alt="IntegraLab" className={styles["login-logo"]} />
+      <img src={logo} alt={import.meta.env.VITE_APP_NAME} className={styles["login-logo"]} />
 
       <div className={styles.field}>
         <label>E-mail</label>
