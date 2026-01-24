@@ -4,38 +4,64 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "../../components/CommonGridCSS/commonGrid.css";
 import Modal from "../../components/Modal/Modal";
+import { useConfirm } from "../../components/ConfirmationDialog/UseConfirm";
 import "./accessManagement.css";
 import { useMediaQuery } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
-import { useState } from "react";
-export default function AccessManagement() {
-  const rows = [
-    {
-      id: 1,
-      perfil: "Administrador",
-      descricao: "Acesso total ao sistema",
-      permissoesAtivas: 3,
-      dataCriacao: "2025-01-15",
-      status: true,
-    },
-    {
-      id: 2,
-      perfil: "Coordenador",
-      descricao: "Gerencia Laboratórios e usuários",
-      permissoesAtivas: 2,
-      dataCriacao: "2025-02-10",
-      status: true,
-    },
-    {
-      id: 3,
-      perfil: "Técnico",
-      descricao: "Acesso aos sistemas e downloads",
-      permissoesAtivas: 2,
-      dataCriacao: "2025-03-05",
-      status: false,
-    },
-  ];
+import { useEffect, useState } from "react";
+import { useGlobalLoading } from "../../components/Loading/GlobalLoadingContext";
+import { useToast } from "../../contexts/useToast";
 
+export default function AccessManagement() {
+  const [rows, setRows] = useState([]);
+  const [status, setStatus] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+  const [profileId, setProfileId] = useState(0);
+  const [profileName, setProfileName] = useState("");
+  const [profileDescription, setProfileDescription] = useState("");
+  const [profileStatus, setProfileStatus] = useState(true);
+  const { showLoading, hideLoading } = useGlobalLoading();
+  const { confirm, ConfirmDialog } = useConfirm();
+  const toast = useToast();
+  useEffect(() => {
+    (async () => {
+      const rowsData = [
+        {
+          id: 1,
+          perfil: "Administrador",
+          descricao: "Acesso total ao sistema",
+          permissoesAtivas: 3,
+          dataCriacao: "2025-01-15",
+          status: true,
+        },
+        {
+          id: 2,
+          perfil: "Coordenador",
+          descricao: "Gerencia Laboratórios e usuários",
+          permissoesAtivas: 2,
+          dataCriacao: "2025-02-10",
+          status: true,
+        },
+        {
+          id: 3,
+          perfil: "Técnico",
+          descricao: "Acesso aos sistemas e downloads",
+          permissoesAtivas: 2,
+          dataCriacao: "2025-03-05",
+          status: false,
+        },
+      ];
+      showLoading("Carregando perfis");
+      try {
+        // const data = await api.get("/profiles"); (para integração no futuro, será assim)
+        setRows(rowsData);
+      } catch (e) {
+        toast.error("Erro", e.message);
+      } finally {
+        hideLoading();
+      }
+    })();
+  }, [showLoading, hideLoading, toast]);
   const isMobile = useMediaQuery("(max-width:700px)");
   const desktopColumns = [
     {
@@ -108,8 +134,53 @@ export default function AccessManagement() {
     desktopColumns.find((col) => col.field === "actions"),
   ];
 
-  const [status, setStatus] = useState(0);
-  const [openModal, setOpenModal] = useState(false);
+  const onOpenNew = () => {
+    setProfileId(0);
+    setProfileName("");
+    setProfileDescription("");
+    setProfileStatus(true);
+    setOpenModal(true);
+  };
+
+  const onOpenEdit = (row) => {
+    setProfileId(row.id);
+    setProfileName(row.perfil || "");
+    setProfileDescription(row.descricao || "");
+    setProfileStatus(Boolean(row.status));
+    setOpenModal(true);
+  };
+
+  const confirmDelete = async (row) => {
+    try {
+      const ok = await confirm({
+        title: "Excluir",
+        message: `Tem certeza que deseja excluir o perfil "${row.perfil}"?`,
+      });
+      if (!ok) return;
+      toast.success("Sucesso", "Perfil excluído com sucesso!");
+    } catch (error) {
+      toast.error("Erro", error);
+    }
+  };
+
+  const onSubmitModal = async (e) => {
+    e.preventDefault();
+    e.preventDefault();
+    var mensagem =
+      profileId == 0
+        ? "Criando perfil de acesso"
+        : "Atualizando perfil de acesso";
+    showLoading(mensagem);
+    setTimeout(function () {
+      if (profileId === 0) {
+        setOpenModal(false);
+        hideLoading();
+        return;
+      }
+      setOpenModal(false);
+      hideLoading();
+    }, 1000);
+  };
 
   return (
     <div>
@@ -138,10 +209,7 @@ export default function AccessManagement() {
             </Select>
           )}
           {!isMobile && (
-            <button
-              className="btn-new-profile"
-              onClick={() => setOpenModal(true)}
-            >
+            <button className="btn-new-profile" onClick={onOpenNew}>
               Novo perfil
             </button>
           )}
@@ -149,7 +217,30 @@ export default function AccessManagement() {
         <DataGrid
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
           rows={rows}
-          columns={isMobile ? mobileColumns : desktopColumns}
+          columns={(isMobile ? mobileColumns : desktopColumns).map((col) =>
+            col.field !== "actions"
+              ? col
+              : {
+                  ...col,
+                  renderCell: (params) => (
+                    <div className="grid-actions">
+                      <button
+                        title="Editar"
+                        onClick={() => onOpenEdit(params.row)}
+                      >
+                        <FontAwesomeIcon icon={faPen} />
+                      </button>
+                      <button
+                        title="Remover"
+                        className="danger"
+                        onClick={() => confirmDelete(params.row)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </div>
+                  ),
+                },
+          )}
           rowSelection={false}
           disableRowSelectionOnClick
           disableColumnMenu
@@ -163,75 +254,85 @@ export default function AccessManagement() {
       </div>
       {isMobile && (
         <div className="wrapper-btn-new-profile-mobile">
-          <button
-            className="btn-new-profile-mobile"
-            onClick={() => setOpenModal(true)}
-          >
+          <button className="btn-new-profile-mobile" onClick={onOpenNew}>
             <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
       )}
       <Modal
         open={openModal}
-        title="Novo perfil de acesso"
+        title={
+          profileId === 0 ? "Novo perfil de acesso" : "Editar perfil de acesso"
+        }
         onClose={() => setOpenModal(false)}
       >
-        <form className="modal-form">
-          <div className="field">
-            <label>Nome</label>
-            <input type="text" placeholder="Nome do Perfil" />
-          </div>
+        {(close) => (
+          <form className="modal-form" onSubmit={onSubmitModal}>
+            <div className="field">
+              <label>Nome</label>
+              <input
+                type="text"
+                placeholder="Nome do Perfil"
+                value={profileName}
+                onChange={(e) => setProfileName(e.target.value)}
+              />
+            </div>
+            <div className="field">
+              <label>Descrição</label>
+              <input
+                type="text"
+                placeholder="Descrição do Perfil"
+                value={profileDescription}
+                onChange={(e) => setProfileDescription(e.target.value)}
+              />
+            </div>
+            <div className="field">
+              <div className="switch-row">
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={profileStatus}
+                    onChange={(e) => setProfileStatus(e.target.checked)}
+                  />
+                  <span className="slider" />
+                </label>
+                <span className="switch-label">Ativo</span>
+              </div>
 
-          <div className="field">
-            <label>Descrição</label>
-            <input type="text" placeholder="Descrição do Perfil" />
-          </div>
-
-          <div className="field">
-            <div className="switch-row">
-              <label className="switch">
-                <input type="checkbox" defaultChecked htmlFor="switch" />
-                <span className="slider" />
-              </label>
-              <span className="switch-label">Ativo</span>
+              <div className="permissions-box">
+                <label className="perm-item">
+                  <input type="checkbox" /> Gestão de usuários
+                </label>
+                <label className="perm-item">
+                  <input type="checkbox" /> Gestão de sistemas
+                </label>
+                <label className="perm-item">
+                  <input type="checkbox" /> Feed de notícias
+                </label>
+                <label className="perm-item">
+                  <input type="checkbox" /> Gestão de laboratórios
+                </label>
+                <label className="perm-item">
+                  <input type="checkbox" /> Downloads
+                </label>
+                <label className="perm-item">
+                  <input type="checkbox" /> Gestão de acessos
+                </label>
+              </div>
             </div>
 
-            <div className="permissions-box">
-              <label className="perm-item">
-                <input type="checkbox" /> Gestão de usuários
-              </label>
-              <label className="perm-item">
-                <input type="checkbox" /> Gestão de sistemas
-              </label>
-              <label className="perm-item">
-                <input type="checkbox" /> Feed de notícias
-              </label>
-              <label className="perm-item">
-                <input type="checkbox" /> Gestão de laboratórios
-              </label>
-              <label className="perm-item">
-                <input type="checkbox" /> Downloads
-              </label>
-              <label className="perm-item">
-                <input type="checkbox" /> Gestão de acessos
-              </label>
+            <div className="modal-actions">
+              <button type="submit" className="btn-submit-profile">
+                Salvar
+              </button>
+              <button type="button" className="btn-cancel" onClick={close}>
+                Cancelar
+              </button>
             </div>
-          </div>
-
-          <div className="modal-actions">
-            <button type="submit" className="btn-submit-profile">
-              Salvar
-            </button>
-            <button
-              type="button"
-              className="btn-cancel"
-              onClick={() => setOpenModal(false)}
-            >
-              Cancelar
-            </button>
-          </div>
-        </form>
+          </form>
+        )}
       </Modal>
+      {ConfirmDialog}
     </div>
   );
 }

@@ -7,9 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "../../contexts/useToast";
 import { useGlobalLoading } from "../../components/Loading/GlobalLoadingContext";
 
-
 export default function LoginPage() {
-const { showLoading, hideLoading } = useGlobalLoading();
+  const { showLoading, hideLoading } = useGlobalLoading();
   const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -18,33 +17,45 @@ const { showLoading, hideLoading } = useGlobalLoading();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isEmailValid = emailRegex.test(email);
-  const isFormValid = email.trim() !== "" && isEmailValid && password.trim() !== "";
+  const isFormValid =
+    email.trim() !== "" && isEmailValid && password.trim() !== "";
   const togglePassword = () => setShowPassword(!showPassword);
 
   const handleLogin = (e) => {
-    e.preventDefault();
-    if (!isFormValid) {
-      let message = "Verifique os campos preenchidos e tente novamente.";
-      if (!isEmailValid)
-        message = "O formato do email está inválido, verifique e tente novamente.";
-      toast.error("Erro", message);
-      return;
-    }
-    showLoading("Autenticando e redirecionando");
-    navigate("/access");
-    setTimeout(() => {
-      toast.success("Sucesso", "Autenticação concluída com sucesso!");
+    try {
+      e.preventDefault();
+      if (!isFormValid) {
+        let message = "Verifique os campos preenchidos e tente novamente.";
+        if (!isEmailValid)
+          message =
+            "O formato do email está inválido, verifique e tente novamente.";
+        toast.error("Erro", message);
+        return;
+      }
+      showLoading("Autenticando e redirecionando");
+      navigate("/access");
+      setTimeout(() => {
+        toast.success("Sucesso", "Autenticação concluída com sucesso!");
+      }, 1500);
+    } catch (error) {
+      toast.error("Erro", error);
+    } finally {
       hideLoading();
-    }, 1500)
+    }
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText("suporte@unesp.edu.br");
     toast.success("Sucesso", "Copiado para a área de transferência!");
   };
+
   return (
     <form className={styles["login-card"]} onSubmit={handleLogin}>
-      <img src={logo} alt={import.meta.env.VITE_APP_NAME} className={styles["login-logo"]} />
+      <img
+        src={logo}
+        alt={import.meta.env.VITE_APP_NAME}
+        className={styles["login-logo"]}
+      />
 
       <div className={styles.field}>
         <label>E-mail</label>

@@ -188,7 +188,7 @@
 }
 
 .switch input:checked + .slider {
-  background: #24b92b;
+  background: var(--main-color);
 }
 
 .switch input:checked + .slider:before {

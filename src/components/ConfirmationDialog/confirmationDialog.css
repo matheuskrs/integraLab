@@ -1,0 +1,58 @@
+.confirm-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.confirm-message {
+  margin: 0;
+  color: #222;
+  line-height: 1.45;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btn {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease-in-out;
+}
+
+.btn:not(.btn-primary):hover {
+  border-color: var(--main-color);
+  color: var(--main-color);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--main-color);
+  color: var(--main-color-text);
+  transition: 200ms ease-in-out;
+}
+
+.btn-primary:hover {
+  opacity:0.85;
+}
+
+.btn-danger {
+  background: #d92d20;
+  color: var(--main-color-text);
+  border-color: #d92d20;
+}
