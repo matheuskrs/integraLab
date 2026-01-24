@@ -129,9 +129,10 @@
 .sidebar-nav li.active {
   background: rgba(30, 107, 214, 0.01);
   border-left: 3px solid #5398f8;
+  cursor:default;
 }
 
-.sidebar-nav li:hover {
+.sidebar-nav li:not(.active):hover {
   background: rgba(30, 107, 214, 0.08);
   border-left: 3px solid var(--main-color);
 }

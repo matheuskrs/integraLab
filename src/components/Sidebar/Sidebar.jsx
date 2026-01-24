@@ -19,11 +19,16 @@ import {
   faChartLine,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../contexts/useToast";
+import { useGlobalLoading } from "../Loading/GlobalLoadingContext";
 
 export default function Sidebar({ activePage }) {
   const [collapsed, setCollapsed] = useState(true);
   const sidebarRef = useRef(null);
   const navigator = useNavigate();
+  const toast = useToast();
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const { showLoading, hideLoading } = useGlobalLoading();
   const MENU_ITEMS = [
     {
       id: "perfis",
@@ -77,8 +82,17 @@ export default function Sidebar({ activePage }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const handleLogout = () => {
-    navigator("/");
+  const handleLogout = async () => {
+    try {
+      showLoading("Desconectando sessão");
+      navigator("/", {replace: true});
+      await sleep(1500);
+      toast.success("Sucesso", "Você desconectou de sua conta.");
+    } catch (error) {
+      toast.error("Erro", error);
+    } finally{
+      hideLoading();
+    }
   };
   return (
     <aside
@@ -106,7 +120,7 @@ export default function Sidebar({ activePage }) {
                 key={item.id}
                 title={item.label}
                 className={activePage === item.id ? "active" : ""}
-                onClick={() => navigator(item.path)}
+                onClick={() => activePage != item.id ? navigator(item.path) : ""}
               >
                 <FontAwesomeIcon icon={item.icon} />
                 {!collapsed && item.label}

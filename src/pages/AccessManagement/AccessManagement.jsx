@@ -8,7 +8,8 @@ import { useConfirm } from "../../components/ConfirmationDialog/UseConfirm";
 import "./accessManagement.css";
 import { useMediaQuery } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useCallback, useState } from "react";
+
 import { useGlobalLoading } from "../../components/Loading/GlobalLoadingContext";
 import { useToast } from "../../contexts/useToast";
 
@@ -20,167 +21,231 @@ export default function AccessManagement() {
   const [profileName, setProfileName] = useState("");
   const [profileDescription, setProfileDescription] = useState("");
   const [profileStatus, setProfileStatus] = useState(true);
+  const [profilePermissions, setProfilePermissions] = useState([]);
   const { showLoading, hideLoading } = useGlobalLoading();
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
+  const MAX_NAME_LENGTH = 60;
+  const MAX_DESCRIPTION_LENGTH = 200;
+
+  const permissions = useMemo(
+    () => [
+      { id: 1, description: "Gestão de usuários" },
+      { id: 2, description: "Gestão de sistemas" },
+      { id: 3, description: "Feed de notícias" },
+      { id: 4, description: "Gestão de laboratórios" },
+      { id: 5, description: "Downloads" },
+      { id: 6, description: "Gestão de acessos" },
+    ],
+    [],
+  );
+
   useEffect(() => {
-    (async () => {
-      const rowsData = [
-        {
-          id: 1,
-          perfil: "Administrador",
-          descricao: "Acesso total ao sistema",
-          permissoesAtivas: 3,
-          dataCriacao: "2025-01-15",
-          status: true,
-        },
-        {
-          id: 2,
-          perfil: "Coordenador",
-          descricao: "Gerencia Laboratórios e usuários",
-          permissoesAtivas: 2,
-          dataCriacao: "2025-02-10",
-          status: true,
-        },
-        {
-          id: 3,
-          perfil: "Técnico",
-          descricao: "Acesso aos sistemas e downloads",
-          permissoesAtivas: 2,
-          dataCriacao: "2025-03-05",
-          status: false,
-        },
-      ];
-      showLoading("Carregando perfis");
-      try {
-        // const data = await api.get("/profiles"); (para integração no futuro, será assim)
-        setRows(rowsData);
-      } catch (e) {
-        toast.error("Erro", e.message);
-      } finally {
-        hideLoading();
-      }
-    })();
-  }, [showLoading, hideLoading, toast]);
-  const isMobile = useMediaQuery("(max-width:700px)");
-  const desktopColumns = [
-    {
-      field: "perfil",
-      headerName: "Perfil",
-      flex: 1,
-      minWidth: isMobile ? 100 : 120,
-    },
-    {
-      field: "descricao",
-      headerName: "Descrição",
-      flex: 1,
-      minWidth: 220,
-    },
-    {
-      field: "permissoesAtivas",
-      headerName: "Permissões ativas",
-      minWidth: 160,
-      renderCell: (params) => <span>{params.value} permissões</span>,
-    },
-    {
-      field: "dataCriacao",
-      headerName: "Data de criação",
-      minWidth: 150,
-    },
-    {
-      field: "status",
-      headerName: "Status",
-      flex: 1,
-      minWidth: 80,
-      maxWidth: 160,
-      renderCell: (params) => {
-        const isActive = Boolean(params.value);
-
-        return (
-          <span
-            className="status-btn"
-            style={{
-              backgroundColor: isActive ? "#24b92b" : "#fd2a2a",
-            }}
-          >
-            {isActive ? "Ativo" : "Inativo"}
-          </span>
-        );
+    setRows([
+      {
+        id: 1,
+        perfil: "Administrador",
+        descricao: "Acesso total ao sistema",
+        permissoesAtivas: 3,
+        dataCriacao: "2025-01-15",
+        status: true,
+        permissions: [1, 2, 6],
       },
-    },
+      {
+        id: 2,
+        perfil: "Coordenador",
+        descricao: "Gerencia Laboratórios e usuários",
+        permissoesAtivas: 2,
+        dataCriacao: "2025-02-10",
+        status: true,
+        permissions: [1, 4],
+      },
+      {
+        id: 3,
+        perfil: "Técnico",
+        descricao: "Acesso aos sistemas e downloads",
+        permissoesAtivas: 2,
+        dataCriacao: "2025-03-05",
+        status: false,
+        permissions: [2, 5],
+      },
+    ]);
+  }, []);
 
-    {
-      field: "actions",
-      headerName: "Ações",
-      minWidth: 80,
-      sortable: false,
-      filterable: false,
-      renderCell: () => (
-        <div className="grid-actions">
-          <button title="Editar">
-            <FontAwesomeIcon icon={faPen} />
-          </button>
-          <button title="Remover" className="danger">
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-        </div>
-      ),
-    },
-  ];
+  const isMobile = useMediaQuery("(max-width:700px)");
+  const desktopColumns = useMemo(
+    () => [
+      {
+        field: "perfil",
+        headerName: "Perfil",
+        flex: 1,
+        minWidth: isMobile ? 100 : 120,
+      },
+      {
+        field: "descricao",
+        headerName: "Descrição",
+        flex: 1,
+        minWidth: 220,
+      },
+      {
+        field: "permissoesAtivas",
+        headerName: "Permissões ativas",
+        minWidth: 160,
+        renderCell: (params) => <span>{params.value} permissões</span>,
+      },
+      {
+        field: "dataCriacao",
+        headerName: "Data de criação",
+        minWidth: 150,
+      },
+      {
+        field: "status",
+        headerName: "Status",
+        flex: 1,
+        minWidth: 80,
+        maxWidth: 160,
+        renderCell: (params) => {
+          const isActive = Boolean(params.value);
 
-  const mobileColumns = [
-    desktopColumns.find((col) => col.field === "perfil"),
-    desktopColumns.find((col) => col.field === "status"),
-    desktopColumns.find((col) => col.field === "actions"),
-  ];
+          return (
+            <span
+              className="status-btn"
+              style={{
+                backgroundColor: isActive ? "#24b92b" : "#fd2a2a",
+              }}
+            >
+              {isActive ? "Ativo" : "Inativo"}
+            </span>
+          );
+        },
+      },
+      {
+        field: "actions",
+        headerName: "Ações",
+        minWidth: 80,
+        sortable: false,
+        filterable: false,
+      },
+    ],
+    [isMobile],
+  );
+
+  const mobileColumns = useMemo(
+    () => [
+      desktopColumns.find((col) => col.field === "perfil"),
+      desktopColumns.find((col) => col.field === "status"),
+      desktopColumns.find((col) => col.field === "actions"),
+    ],
+    [desktopColumns],
+  );
 
   const onOpenNew = () => {
     setProfileId(0);
     setProfileName("");
     setProfileDescription("");
     setProfileStatus(true);
+    setProfilePermissions([]);
     setOpenModal(true);
   };
 
-  const onOpenEdit = (row) => {
+  const onOpenEdit = useCallback((row) => {
     setProfileId(row.id);
     setProfileName(row.perfil || "");
     setProfileDescription(row.descricao || "");
     setProfileStatus(Boolean(row.status));
+    setProfilePermissions(row.permissions || []);
     setOpenModal(true);
-  };
+  }, []);
 
-  const confirmDelete = async (row) => {
-    try {
-      const ok = await confirm({
-        title: "Excluir",
-        message: `Tem certeza que deseja excluir o perfil "${row.perfil}"?`,
-      });
-      if (!ok) return;
-      toast.success("Sucesso", "Perfil excluído com sucesso!");
-    } catch (error) {
-      toast.error("Erro", error);
-    }
+  const confirmDelete = useCallback(
+    async (row) => {
+      try {
+        const ok = await confirm({
+          title: "Excluir",
+          message: `Tem certeza que deseja excluir o perfil "${row.perfil}"?`,
+        });
+        if (!ok) return;
+        toast.success("Sucesso", "Perfil excluído com sucesso!");
+      } catch (error) {
+        toast.error("Erro", error);
+      }
+    },
+    [confirm, toast],
+  );
+
+  const togglePermission = (permission) => {
+    setProfilePermissions((prev) =>
+      prev.includes(permission.id)
+        ? prev.filter((p) => p !== permission.id)
+        : [...prev, permission.id],
+    );
   };
 
   const onSubmitModal = async (e) => {
     e.preventDefault();
-    e.preventDefault();
+
+    const name = (profileName || "").trim();
+    const description = (profileDescription || "").trim();
+
+    if (!name) {
+      toast.error("Erro", "O campo Nome é obrigatório.");
+      return;
+    }
+    if (name.length > MAX_NAME_LENGTH) {
+      toast.error(
+        "Erro",
+        `O campo Nome deve ter no máximo ${MAX_NAME_LENGTH} caracteres.`,
+      );
+      return;
+    }
+    if (description.length > MAX_DESCRIPTION_LENGTH) {
+      toast.error(
+        "Erro",
+        `O campo Descrição deve ter no máximo ${MAX_DESCRIPTION_LENGTH} caracteres.`,
+      );
+      return;
+    }
+    if (!profilePermissions || profilePermissions.length === 0) {
+      toast.error("Erro", "Selecione ao menos uma permissão para o perfil.");
+      return;
+    }
+
     var mensagem =
       profileId == 0
         ? "Criando perfil de acesso"
         : "Atualizando perfil de acesso";
+
     showLoading(mensagem);
     setTimeout(function () {
-      if (profileId === 0) {
-        setOpenModal(false);
-        hideLoading();
-        return;
-      }
       setOpenModal(false);
       hideLoading();
     }, 1000);
   };
+  const columns = useMemo(() => {
+    const base = isMobile ? mobileColumns : desktopColumns;
+
+    return base.map((col) =>
+      col.field !== "actions"
+        ? col
+        : {
+            ...col,
+            renderCell: (params) => (
+              <div className="grid-actions">
+                <button title="Editar" onClick={() => onOpenEdit(params.row)}>
+                  <FontAwesomeIcon icon={faPen} />
+                </button>
+                <button
+                  title="Remover"
+                  className="danger"
+                  onClick={() => confirmDelete(params.row)}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </div>
+            ),
+          },
+    );
+  }, [isMobile, mobileColumns, desktopColumns, onOpenEdit, confirmDelete]);
 
   return (
     <div>
@@ -217,30 +282,7 @@ export default function AccessManagement() {
         <DataGrid
           localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
           rows={rows}
-          columns={(isMobile ? mobileColumns : desktopColumns).map((col) =>
-            col.field !== "actions"
-              ? col
-              : {
-                  ...col,
-                  renderCell: (params) => (
-                    <div className="grid-actions">
-                      <button
-                        title="Editar"
-                        onClick={() => onOpenEdit(params.row)}
-                      >
-                        <FontAwesomeIcon icon={faPen} />
-                      </button>
-                      <button
-                        title="Remover"
-                        className="danger"
-                        onClick={() => confirmDelete(params.row)}
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
-                    </div>
-                  ),
-                },
-          )}
+          columns={columns}
           rowSelection={false}
           disableRowSelectionOnClick
           disableColumnMenu
@@ -269,9 +311,10 @@ export default function AccessManagement() {
         {(close) => (
           <form className="modal-form" onSubmit={onSubmitModal}>
             <div className="field">
-              <label>Nome</label>
+              <label>Nome *</label>
               <input
                 type="text"
+                maxLength={MAX_NAME_LENGTH}
                 placeholder="Nome do Perfil"
                 value={profileName}
                 onChange={(e) => setProfileName(e.target.value)}
@@ -281,6 +324,7 @@ export default function AccessManagement() {
               <label>Descrição</label>
               <input
                 type="text"
+                maxLength={MAX_DESCRIPTION_LENGTH}
                 placeholder="Descrição do Perfil"
                 value={profileDescription}
                 onChange={(e) => setProfileDescription(e.target.value)}
@@ -300,24 +344,16 @@ export default function AccessManagement() {
               </div>
 
               <div className="permissions-box">
-                <label className="perm-item">
-                  <input type="checkbox" /> Gestão de usuários
-                </label>
-                <label className="perm-item">
-                  <input type="checkbox" /> Gestão de sistemas
-                </label>
-                <label className="perm-item">
-                  <input type="checkbox" /> Feed de notícias
-                </label>
-                <label className="perm-item">
-                  <input type="checkbox" /> Gestão de laboratórios
-                </label>
-                <label className="perm-item">
-                  <input type="checkbox" /> Downloads
-                </label>
-                <label className="perm-item">
-                  <input type="checkbox" /> Gestão de acessos
-                </label>
+                {permissions.map((permission) => (
+                  <label key={permission.id} className="perm-item">
+                    <input
+                      type="checkbox"
+                      checked={profilePermissions.includes(permission.id)}
+                      onChange={() => togglePermission(permission)}
+                    />
+                    {permission.description}
+                  </label>
+                ))}
               </div>
             </div>
 
