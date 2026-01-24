@@ -1,4 +1,8 @@
-import { useNavigate, useRouteError, isRouteErrorResponse } from "react-router-dom";
+import {
+  useNavigate,
+  useRouteError,
+  isRouteErrorResponse,
+} from "react-router-dom";
 import "./errorPage.css";
 
 export default function ErrorPage() {
@@ -36,6 +40,13 @@ export default function ErrorPage() {
     title = "Erro interno";
     message = error.message || message;
   }
+  const handleGoBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/");
+    }
+  };
 
   return (
     <div className="notfound-container">
@@ -43,8 +54,8 @@ export default function ErrorPage() {
       <h2>{title}</h2>
       <p>{message}</p>
 
-      <button onClick={() => navigate("/")}>
-        Voltar para o início
+      <button onClick={handleGoBack}>
+        {window.history.length > 1 ? "Voltar" : "Ir para o início"}
       </button>
     </div>
   );

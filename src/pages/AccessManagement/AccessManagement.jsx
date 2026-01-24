@@ -9,10 +9,10 @@ import "./accessManagement.css";
 import { useMediaQuery } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
 import { useEffect, useMemo, useCallback, useState } from "react";
-
+import Tippy from "@tippyjs/react";
 import { useGlobalLoading } from "../../components/Loading/GlobalLoadingContext";
 import { useToast } from "../../contexts/useToast";
-
+import profileAccessImg from "../../assets/AccessManagement/ProfileAccessImg.png";
 export default function AccessManagement() {
   const [rows, setRows] = useState([]);
   const [status, setStatus] = useState(0);
@@ -231,16 +231,23 @@ export default function AccessManagement() {
             ...col,
             renderCell: (params) => (
               <div className="grid-actions">
-                <button title="Editar" onClick={() => onOpenEdit(params.row)}>
-                  <FontAwesomeIcon icon={faPen} />
-                </button>
-                <button
-                  title="Remover"
-                  className="danger"
-                  onClick={() => confirmDelete(params.row)}
+                <Tippy key="btn-edit-title" content="Editar" placement="right">
+                  <button onClick={() => onOpenEdit(params.row)}>
+                    <FontAwesomeIcon icon={faPen} />
+                  </button>
+                </Tippy>
+                <Tippy
+                  key="btn-remove-title"
+                  content="Remover"
+                  placement="right"
                 >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
+                  <button
+                    className="danger"
+                    onClick={() => confirmDelete(params.row)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </Tippy>
               </div>
             ),
           },
@@ -249,10 +256,19 @@ export default function AccessManagement() {
 
   return (
     <div>
-      <h1 className="access-title">Perfis de Acesso</h1>
-      <p className="access-subtitle">
-        Gerencie os perfis e permissões de acesso do sistema
-      </p>
+      <div class="header-wrapper">
+        {!isMobile && (
+          <div className="header-img-wrapper">
+            <img src={profileAccessImg} />
+          </div>
+        )}
+        <div className="header-content-wrapper">
+          <h1 className="access-title">Perfis de Acesso</h1>
+          <p className="access-subtitle">
+            Gerencie os perfis e permissões de acesso do sistema
+          </p>
+        </div>
+      </div>
       <div className="grid-wrapper">
         <div className="grid-header-wrapper">
           <input

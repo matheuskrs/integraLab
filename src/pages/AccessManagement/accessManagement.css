@@ -1,7 +1,11 @@
 .access-container {
-  padding: 40px 0px 0px 110px;
+  padding: 40px 0px 0px 120px;
 }
-
+.header-wrapper{
+  display:flex;
+  gap:30px;
+  margin-bottom:20px;
+}
 .access-title {
   font-size: 32px;
   font-weight: 600;
@@ -96,16 +100,16 @@
 .modal-form .field input {
   padding: 10px 12px;
   border-radius: 4px;
-  border: 1px solid #ccc;
   font-size: 14px;
   background-color: white;
   color: black;
   outline: none;
-  transition: 200ms ease-in-out;
+  border: #ddd 2px solid;
+  transition: 140ms ease-in-out;
 }
 
 .modal-form .field input:focus {
-  border: var(--main-color) 2px solid;
+  border-color: var(--main-color);
 }
 
 .modal-actions {

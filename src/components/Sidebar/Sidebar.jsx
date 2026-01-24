@@ -21,6 +21,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../contexts/useToast";
 import { useGlobalLoading } from "../Loading/GlobalLoadingContext";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 
 export default function Sidebar({ activePage }) {
   const [collapsed, setCollapsed] = useState(true);
@@ -85,12 +87,12 @@ export default function Sidebar({ activePage }) {
   const handleLogout = async () => {
     try {
       showLoading("Desconectando sessão");
-      navigator("/", {replace: true});
+      navigator("/", { replace: true });
       await sleep(1500);
       toast.success("Sucesso", "Você desconectou de sua conta.");
     } catch (error) {
       toast.error("Erro", error);
-    } finally{
+    } finally {
       hideLoading();
     }
   };
@@ -116,36 +118,65 @@ export default function Sidebar({ activePage }) {
         <nav className="sidebar-nav">
           <ul>
             {MENU_ITEMS.map((item) => (
-              <li
+              <Tippy
                 key={item.id}
-                title={item.label}
-                className={activePage === item.id ? "active" : ""}
-                onClick={() => activePage != item.id ? navigator(item.path) : ""}
+                content={item.label}
+                placement="right"
+                disabled={!collapsed}
               >
-                <FontAwesomeIcon icon={item.icon} />
-                {!collapsed && item.label}
-              </li>
+                <li
+                  key={item.id}
+                  className={activePage === item.id ? "active" : ""}
+                  onClick={() =>
+                    activePage != item.id ? navigator(item.path) : ""
+                  }
+                >
+                  <FontAwesomeIcon icon={item.icon} />
+                  {!collapsed && item.label}
+                </li>
+              </Tippy>
             ))}
           </ul>
         </nav>
       </div>
 
       <div className="sidebar-bottom">
-        <div className="user-info">
-          <FontAwesomeIcon icon={faCircleUser} className="user-avatar" />
-          {!collapsed && (
-            <div className="info-details">
-              <span>Administrador</span>
-              <strong className="user-name">Matheus Rodrigues</strong>
-            </div>
-          )}
-        </div>
-        <button className="sidebar-help">
-          <FontAwesomeIcon icon={faQuestionCircle} /> {!collapsed && "Ajuda"}
-        </button>
-        <button className="sidebar-logout" onClick={handleLogout}>
-          <FontAwesomeIcon icon={faRightFromBracket} /> {!collapsed && "Sair"}
-        </button>
+        <Tippy
+          key="sidebar-user"
+          content="Seu Usuário - Matheus Rodrigues"
+          placement="right"
+          disabled={!collapsed}
+        >
+          <div className="user-info">
+            <FontAwesomeIcon icon={faCircleUser} className="user-avatar" />
+            {!collapsed && (
+              <div className="info-details">
+                <span>Administrador</span>
+                <strong className="user-name">Matheus Rodrigues</strong>
+              </div>
+            )}
+          </div>
+        </Tippy>
+        <Tippy
+          key="sidebar-help"
+          content="Ajuda"
+          placement="right"
+          disabled={!collapsed}
+        >
+          <button className="sidebar-help">
+            <FontAwesomeIcon icon={faQuestionCircle} /> {!collapsed && "Ajuda"}
+          </button>
+        </Tippy>
+        <Tippy
+          key="sidebar-logout"
+          content="Sair"
+          placement="right"
+          disabled={!collapsed}
+        >
+          <button className="sidebar-logout" onClick={handleLogout}>
+            <FontAwesomeIcon icon={faRightFromBracket} /> {!collapsed && "Sair"}
+          </button>
+        </Tippy>
       </div>
     </aside>
   );
