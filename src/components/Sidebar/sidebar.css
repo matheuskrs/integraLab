@@ -77,9 +77,6 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-}
-
-.sidebar-nav {
   scrollbar-width: thin;
 }
 
@@ -107,7 +104,6 @@
 }
 
 .sidebar-nav li {
-  padding: 12px 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -115,6 +111,23 @@
   white-space: nowrap;
   border-left: 3px solid transparent;
   transition: 0.1s ease-in-out;
+}
+
+.sidebar-nav li span {
+  width: 100%;
+  display: flex;
+  height: 100%;
+  padding: 12px 0;
+  align-items: center;
+  gap: 5px;
+}
+
+.sidebar.collapsed li span {
+  justify-content: center;
+}
+
+.sidebar:not(.collapsed) li span {
+  padding-left: 25px;
 }
 
 .sidebar-nav a {
@@ -129,8 +142,8 @@
 .sidebar-nav li.active {
   background: rgba(30, 107, 214, 0.01);
   border-left: 3px solid var(--main-color);
-  cursor:default;
-  color:var(--main-color)
+  cursor: default;
+  color: var(--main-color);
 }
 
 .sidebar-nav li:not(.active):hover {
@@ -140,7 +153,6 @@
 
 .sidebar.collapsed .sidebar-nav li {
   justify-content: center;
-  padding: 12px 0;
   padding-right: 3px;
 }
 

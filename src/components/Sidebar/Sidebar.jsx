@@ -21,8 +21,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../contexts/useToast";
 import { useGlobalLoading } from "../Loading/GlobalLoadingContext";
-import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
+import Tooltip from "../Tooltip/Tooltip";
 
 export default function Sidebar({ activePage }) {
   const [collapsed, setCollapsed] = useState(true);
@@ -33,29 +32,29 @@ export default function Sidebar({ activePage }) {
   const { showLoading, hideLoading } = useGlobalLoading();
   const MENU_ITEMS = [
     {
-      id: "perfis",
+      id: "access",
       label: "Perfis de acesso",
       icon: faShield,
       path: "/access",
     },
     {
-      id: "usuarios",
+      id: "users",
       label: "Usuários",
       icon: faUserFriends,
-      path: "/usuarios",
+      path: "/users",
     },
     {
-      id: "laboratorios",
+      id: "laboratories",
       label: "Laboratórios",
       icon: faBuilding,
-      path: "/laboratorios",
+      path: "/laboratories",
     },
     { id: "sistemas", label: "Sistemas", icon: faBox, path: "/sistemas" },
     {
-      id: "associacao",
+      id: "association",
       label: "Associação",
       icon: faLink,
-      path: "/associacao",
+      path: "/association",
     },
     {
       id: "downloads",
@@ -65,10 +64,10 @@ export default function Sidebar({ activePage }) {
     },
     { id: "feed", label: "Feed de notícias", icon: faNewspaper, path: "/feed" },
     {
-      id: "gestao",
+      id: "management",
       label: "Gestão de Acessos",
       icon: faChartLine,
-      path: "/gestao",
+      path: "/management",
     },
   ];
 
@@ -96,6 +95,12 @@ export default function Sidebar({ activePage }) {
       hideLoading();
     }
   };
+
+  const handleNavigate = async (path) => {
+    showLoading("Carregando página");
+    navigator(path);
+    setTimeout(() => hideLoading(), 150);
+  };
   return (
     <aside
       ref={sidebarRef}
@@ -118,32 +123,32 @@ export default function Sidebar({ activePage }) {
         <nav className="sidebar-nav">
           <ul>
             {MENU_ITEMS.map((item) => (
-              <Tippy
+              <li
                 key={item.id}
-                content={item.label}
-                placement="right"
-                disabled={!collapsed}
+                className={activePage === item.id ? "active" : ""}
+                onClick={() =>
+                  activePage !== item.id && handleNavigate(item.path)
+                }
               >
-                <li
-                  key={item.id}
-                  className={activePage === item.id ? "active" : ""}
-                  onClick={() =>
-                    activePage != item.id ? navigator(item.path) : ""
-                  }
+                <Tooltip
+                  content={item.label}
+                  placement="right"
+                  disabled={!collapsed}
                 >
-                  <FontAwesomeIcon icon={item.icon} />
-                  {!collapsed && item.label}
-                </li>
-              </Tippy>
+                  <span className="menu-item-ref">
+                    <FontAwesomeIcon icon={item.icon} />
+                    {!collapsed && item.label}
+                  </span>
+                </Tooltip>
+              </li>
             ))}
           </ul>
         </nav>
       </div>
 
       <div className="sidebar-bottom">
-        <Tippy
-          key="sidebar-user"
-          content="Seu Usuário - Matheus Rodrigues"
+        <Tooltip
+          content="Seu Usuário - Matheus Rodrigues (Administrador)"
           placement="right"
           disabled={!collapsed}
         >
@@ -156,27 +161,19 @@ export default function Sidebar({ activePage }) {
               </div>
             )}
           </div>
-        </Tippy>
-        <Tippy
-          key="sidebar-help"
-          content="Ajuda"
-          placement="right"
-          disabled={!collapsed}
-        >
+        </Tooltip>
+
+        <Tooltip content="Ajuda" placement="right" disabled={!collapsed}>
           <button className="sidebar-help">
             <FontAwesomeIcon icon={faQuestionCircle} /> {!collapsed && "Ajuda"}
           </button>
-        </Tippy>
-        <Tippy
-          key="sidebar-logout"
-          content="Sair"
-          placement="right"
-          disabled={!collapsed}
-        >
+        </Tooltip>
+
+        <Tooltip content="Sair" placement="right" disabled={!collapsed}>
           <button className="sidebar-logout" onClick={handleLogout}>
             <FontAwesomeIcon icon={faRightFromBracket} /> {!collapsed && "Sair"}
           </button>
-        </Tippy>
+        </Tooltip>
       </div>
     </aside>
   );

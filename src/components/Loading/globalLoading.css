@@ -9,9 +9,7 @@
   opacity: 1;
   visibility: visible;
   z-index: 99999;
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
+  transition: 0.3s ease;
 }
 
 #global-loading.hidden {

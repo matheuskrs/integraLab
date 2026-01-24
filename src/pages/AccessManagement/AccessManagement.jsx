@@ -9,7 +9,7 @@ import "./accessManagement.css";
 import { useMediaQuery } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
 import { useEffect, useMemo, useCallback, useState } from "react";
-import Tippy from "@tippyjs/react";
+import Tooltip from "../../components/Tooltip/Tooltip";
 import { useGlobalLoading } from "../../components/Loading/GlobalLoadingContext";
 import { useToast } from "../../contexts/useToast";
 import profileAccessImg from "../../assets/AccessManagement/ProfileAccessImg.png";
@@ -88,7 +88,14 @@ export default function AccessManagement() {
         field: "permissions",
         headerName: "Permissões ativas",
         minWidth: 160,
-        renderCell: (params) => <span>{params.value.length} {params.value.length > 1 ? "permissões" : "permissão"}</span>,
+        renderCell: (params) => {
+          const qtd = params.value?.length ?? 0;
+          return (
+            <span>
+              {qtd} {qtd == 1 ? "permissão" : "permissões"}
+            </span>
+          );
+        },
       },
       {
         field: "dataCriacao",
@@ -162,12 +169,17 @@ export default function AccessManagement() {
           message: `Tem certeza que deseja excluir o perfil "${row.perfil}"?`,
         });
         if (!ok) return;
+
+        showLoading("Excluindo perfil");
         toast.success("Sucesso", "Perfil excluído com sucesso!");
+        setTimeout(function () {
+          hideLoading();
+        }, 400);
       } catch (error) {
         toast.error("Erro", error);
       }
     },
-    [confirm, toast],
+    [confirm, toast, showLoading, hideLoading],
   );
 
   const togglePermission = (permission) => {
@@ -228,23 +240,19 @@ export default function AccessManagement() {
             ...col,
             renderCell: (params) => (
               <div className="grid-actions">
-                <Tippy key="btn-edit-title" content="Editar" placement="right">
+                <Tooltip content="Editar" placement="right" disabled={false}>
                   <button onClick={() => onOpenEdit(params.row)}>
                     <FontAwesomeIcon icon={faPen} />
                   </button>
-                </Tippy>
-                <Tippy
-                  key="btn-remove-title"
-                  content="Remover"
-                  placement="right"
-                >
+                </Tooltip>
+                <Tooltip content="Remover" placement="right" disabled={false}>
                   <button
                     className="danger"
                     onClick={() => confirmDelete(params.row)}
                   >
                     <FontAwesomeIcon icon={faTrash} />
                   </button>
-                </Tippy>
+                </Tooltip>
               </div>
             ),
           },
@@ -253,7 +261,7 @@ export default function AccessManagement() {
 
   return (
     <div>
-      <div class="header-wrapper">
+      <div className="header-wrapper">
         {!isMobile && (
           <div className="header-img-wrapper">
             <img src={profileAccessImg} />
