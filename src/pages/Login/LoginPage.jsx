@@ -1,6 +1,6 @@
 import styles from "./login.module.css";
 import logo from "../../assets/SInLabsLogo.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,22 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [capsLockOn, setCapsLockOn] = useState(false);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (!e.getModifierState) return;
+      setCapsLockOn(e.getModifierState("CapsLock"));
+    };
+
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("keyup", onKey);
+
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("keyup", onKey);
+    };
+  }, []);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isEmailValid = emailRegex.test(email);
@@ -65,6 +81,7 @@ export default function LoginPage() {
           onChange={(e) => setEmail(e.target.value)}
           className={email && !isEmailValid ? styles["input-error"] : ""}
           autoComplete="email"
+          maxLength={100}
         />
       </div>
 
@@ -77,8 +94,17 @@ export default function LoginPage() {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyUp={(e) =>
+              setCapsLockOn(
+                e.getModifierState && e.getModifierState("CapsLock"),
+              )
+            }
             autoComplete="current-password"
+            maxLength={150}
           />
+          <span className={styles["toggle-caps"]}>
+            {capsLockOn ? "A" : "a"}
+          </span>
           <span className={styles["toggle-password"]} onClick={togglePassword}>
             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
           </span>
@@ -108,7 +134,7 @@ export default function LoginPage() {
       </button>
 
       <footer className={styles["login-footer"]}>
-        Versão 1.0.0 ·{" "}
+        Versão 1.0.0 ·
         <span
           className={styles["footer-support-email"]}
           onClick={copyToClipboard}
