@@ -1,10 +1,10 @@
 .access-container {
   padding: 40px 0px 0px 120px;
 }
-.header-wrapper{
-  display:flex;
-  gap:30px;
-  margin-bottom:20px;
+.header-wrapper {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
 }
 .access-title {
   font-size: 32px;
@@ -15,7 +15,7 @@
 .access-subtitle {
   font-size: 16px;
   color: #666;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .access-search {
@@ -24,6 +24,7 @@
   border-radius: 6px;
   font-size: 14px;
   flex: 1.5;
+  min-width: 0px;
 }
 
 .select-user-state-list {
@@ -132,8 +133,8 @@
   color: white;
 }
 
-.btn-submit-profile:hover{
-  opacity:0.8;
+.btn-submit-profile:hover {
+  opacity: 0.8;
 }
 
 .btn-cancel {
@@ -215,9 +216,11 @@
   font-size: 14px;
 }
 
-
-@media(max-width: 700px){
-  .permissions-box{
+@media (max-width: 700px) {
+  .permissions-box {
     grid-template-columns: 1fr;
+  }
+  .access-container {
+    padding: 40px 0px 0px 100px;
   }
 }

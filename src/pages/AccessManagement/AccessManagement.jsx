@@ -171,9 +171,9 @@ export default function AccessManagement() {
         if (!ok) return;
 
         showLoading("Excluindo perfil");
-        toast.success("Sucesso", "Perfil excluído com sucesso!");
         setTimeout(function () {
           hideLoading();
+          toast.success("Sucesso", "Perfil excluído com sucesso!");
         }, 400);
       } catch (error) {
         toast.error("Erro", error);
@@ -219,15 +219,13 @@ export default function AccessManagement() {
       return;
     }
 
-    var mensagem =
-      profileId == 0
-        ? "Criando perfil de acesso"
-        : "Atualizando perfil de acesso";
-
+    var mensagem = profileId == 0 ? "Criando perfil de acesso" : "Atualizando perfil de acesso";
+    var mensagemSucesso = profileId == 0 ? "Perfil de acesso criado com sucesso!" : "Perfil de acesso atualizado com sucesso!";
     showLoading(mensagem);
     setTimeout(function () {
       setOpenModal(false);
       hideLoading();
+      toast.success("Sucesso", mensagemSucesso);
     }, 1000);
   };
   const columns = useMemo(() => {
