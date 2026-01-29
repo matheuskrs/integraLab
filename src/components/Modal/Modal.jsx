@@ -1,9 +1,10 @@
 import { createPortal } from "react-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./modal.css";
 
 export default function Modal({ open, title, onClose, children }) {
   const [closing, setClosing] = useState(false);
+  const startedOnBackdrop = useRef(false);
 
   const handleClose = () => {
     setClosing(true);
@@ -33,16 +34,28 @@ export default function Modal({ open, title, onClose, children }) {
     setClosing(false);
     onClose();
   };
+
   const content = typeof children === "function" ? children(handleClose) : children;
+
+  const onBackdropPointerDown = (e) => {
+    startedOnBackdrop.current = e.target === e.currentTarget;
+    if (startedOnBackdrop.current) handleClose();
+  };
+
+  const onBackdropPointerUp = () => {
+    startedOnBackdrop.current = false;
+  };
+
   return createPortal(
     <div
       className={`modal-backdrop ${closing ? "closing" : ""}`}
-      onClick={handleClose}
+      onPointerDown={onBackdropPointerDown}
+      onPointerUp={onBackdropPointerUp}
     >
       <div
         className={`modal ${closing ? "closing" : ""}`}
         onAnimationEnd={handleAnimationEnd}
-        onClick={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
       >
         <header className="modal-header">
           <h2>{title}</h2>

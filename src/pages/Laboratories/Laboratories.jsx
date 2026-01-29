@@ -154,7 +154,8 @@ export default function Laboratories() {
   const setField = (key) => (e) => {
     let value = e.target.value;
     if (key === "phone") value = maskPhone(value);
-    if (key === "cep") value = maskCEP(value);
+    else if (key === "cep") value = maskCEP(value);
+    else if (key === "cnpj") value = maskCNPJ(value);
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -163,6 +164,37 @@ export default function Laboratories() {
   const onFileChange = (e) => {
     const file = e.target.files?.[0] ?? null;
     setForm((prev) => ({ ...prev, file }));
+  };
+
+  const onSearchCEP = async () => {
+    const cep = (form.cep || "").replace(/\D/g, "");
+    if (cep.length !== 8) {
+      toast.error("Erro", "CEP inválido");
+      return;
+    }
+
+    try {
+      showLoading("Buscando CEP");
+      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await res.json();
+
+      if (!res.ok || data.erro) {
+        toast.error("Erro", "CEP não encontrado, verifique se o valor informado é válido.");
+        return;
+      }
+
+      setForm((prev) => ({
+        ...prev,
+        address: data.logradouro || prev.address,
+        city: data.localidade || prev.city,
+        uf: data.uf || prev.uf,
+      }));
+      toast.success("CEP encontrado com sucesso!")
+    } catch {
+      toast.error("Erro", "Falha ao buscar CEP");
+    } finally {
+      hideLoading();
+    }
   };
 
   const onOpenNew = () => {
@@ -227,7 +259,7 @@ export default function Laboratories() {
       message: `Tem certeza que deseja excluir o laboratório "${lab.name}"?`,
     });
     if (!ok) return;
-    showLoading("Excluíndo laboratório");
+    showLoading("Excluindo laboratório");
     await sleep(1500);
     toast.success("Sucesso", "Laboratório excluído com sucesso!");
     hideLoading();
@@ -251,6 +283,26 @@ export default function Laboratories() {
     value = value.slice(0, 8);
     if (value.length > 5) {
       value = value.replace(/^(\d{5})(\d)/, "$1-$2");
+    }
+
+    return value;
+  };
+
+  const maskCNPJ = (value) => {
+    value = value.replace(/\D/g, "");
+    value = value.slice(0, 14);
+
+    if (value.length >= 3) {
+      value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+    }
+    if (value.length >= 6) {
+      value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+    }
+    if (value.length >= 9) {
+      value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})(\d)/, "$1.$2.$3/$4");
+    }
+    if (value.length >= 13) {
+      value = value.replace(/(\d{4})(\d)/, "$1-$2");
     }
 
     return value;
@@ -462,7 +514,11 @@ export default function Laboratories() {
                       onChange={setField("cep")}
                       inputMode="numeric"
                     />
-                    <button type="button" className="btn-cep-search">
+                    <button
+                      type="button"
+                      className="btn-cep-search"
+                      onClick={onSearchCEP}
+                    >
                       Buscar
                     </button>
                   </div>
