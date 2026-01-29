@@ -336,6 +336,7 @@ export default function AccessManagement() {
                 maxLength={MAX_NAME_LENGTH}
                 placeholder="Nome do Perfil"
                 value={profileName}
+                required
                 onChange={(e) => setProfileName(e.target.value)}
               />
             </div>

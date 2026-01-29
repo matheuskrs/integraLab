@@ -299,6 +299,7 @@
   cursor: pointer;
   transition: 200ms ease-in-out;
   white-space: nowrap;
+  height: 100%;
 }
 .btn-cep-search:hover {
   border-color: var(--main-color);

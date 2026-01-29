@@ -15,7 +15,7 @@ import {
 import laboratoryImg from "../../assets/Laboratories/laboratoryImg.png";
 import Modal from "../../components/Modal/Modal";
 import "./laboratories.css";
-
+import Tooltip from "../../components/Tooltip/Tooltip";
 import { useGlobalLoading } from "../../components/Loading/GlobalLoadingContext";
 import { useToast } from "../../contexts/useToast";
 import { useConfirm } from "../../components/ConfirmationDialog/UseConfirm";
@@ -30,7 +30,7 @@ export default function Laboratories() {
   const [statusFilter, setStatusFilter] = useState(0);
   const { showLoading, hideLoading } = useGlobalLoading();
   const { confirm, ConfirmDialog } = useConfirm();
-
+  const [isNew, setIsNew] = useState(true);
   const laboratories = [
     {
       id: 1,
@@ -45,6 +45,7 @@ export default function Laboratories() {
       email: "central@labs.com.br",
       avatar: null,
       status: { id: 1, color: "#24b92b", description: "Ativo" },
+      coordinates: "teste",
     },
     {
       id: 2,
@@ -59,6 +60,7 @@ export default function Laboratories() {
       email: "norte@labs.com.br",
       avatar: null,
       status: { id: 2, color: "#fd2a2a", description: "Inativo" },
+      coordinates: "teste",
     },
     {
       id: 3,
@@ -73,6 +75,7 @@ export default function Laboratories() {
       email: "minas@labs.com.br",
       avatar: null,
       status: { id: 1, color: "#24b92b", description: "Ativo" },
+      coordinates: "teste",
     },
     {
       id: 4,
@@ -87,6 +90,7 @@ export default function Laboratories() {
       email: "sul@labs.com.br",
       avatar: null,
       status: { id: 1, color: "#24b92b", description: "Ativo" },
+      coordinates: "teste",
     },
     {
       id: 5,
@@ -101,6 +105,7 @@ export default function Laboratories() {
       email: "nordeste@labs.com.br",
       avatar: null,
       status: { id: 2, color: "#fd2a2a", description: "Inativo" },
+      coordinates: "teste",
     },
     {
       id: 6,
@@ -115,6 +120,7 @@ export default function Laboratories() {
       email: "centrooeste@labs.com.br",
       avatar: null,
       status: { id: 1, color: "#24b92b", description: "Ativo" },
+      coordinates: "teste",
     },
   ];
 
@@ -142,10 +148,15 @@ export default function Laboratories() {
     email: "",
     statusId: 1,
     file: null,
+    coordinates: "",
   });
 
-  const setField = (key) => (e) =>
-    setForm((prev) => ({ ...prev, [key]: e.target.value }));
+  const setField = (key) => (e) => {
+    let value = e.target.value;
+    if (key === "phone") value = maskPhone(value);
+    if (key === "cep") value = maskCEP(value);
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
 
   const onPickFile = () => fileRef.current?.click();
 
@@ -156,6 +167,7 @@ export default function Laboratories() {
 
   const onOpenNew = () => {
     setLaboratoryId(0);
+    setIsNew(true);
     setForm({
       name: "",
       cnpj: "",
@@ -168,12 +180,14 @@ export default function Laboratories() {
       email: "",
       statusId: 1,
       file: null,
+      coordinates: "",
     });
     setOpenModal(true);
   };
 
   const onOpenEdit = (lab) => {
     setLaboratoryId(lab.id);
+    setIsNew(false);
     setForm({
       name: lab.name || "",
       cnpj: lab.cnpj || "",
@@ -186,16 +200,24 @@ export default function Laboratories() {
       email: lab.email || "",
       statusId: lab.status?.id ?? 1,
       file: null,
+      coordinates: lab.coordinates,
     });
     setOpenModal(true);
   };
 
   const onSubmitModal = async (e) => {
     e.preventDefault();
-    showLoading(laboratoryId == 0 ? "Criando Laboratório" : "Editando laboratório");
+    showLoading(
+      laboratoryId == 0 ? "Criando Laboratório" : "Editando laboratório",
+    );
     await sleep(1500);
     hideLoading();
-    toast.success("Sucesso", laboratoryId == 0 ? "Laboratório criado com sucesso!" : "Laboratório editado com sucesso!");
+    toast.success(
+      "Sucesso",
+      laboratoryId == 0
+        ? "Laboratório criado com sucesso!"
+        : "Laboratório editado com sucesso!",
+    );
     setOpenModal(false);
   };
 
@@ -209,6 +231,29 @@ export default function Laboratories() {
     await sleep(1500);
     toast.success("Sucesso", "Laboratório excluído com sucesso!");
     hideLoading();
+  };
+
+  const maskPhone = (value) => {
+    value = value.replace(/\D/g, "");
+    value = value.slice(0, 11);
+    if (value.length >= 2) {
+      value = value.replace(/^(\d{2})(\d)/, "($1) $2");
+    }
+    if (value.length >= 7) {
+      value = value.replace(/(\d{5})(\d)/, "$1-$2");
+    }
+
+    return value;
+  };
+
+  const maskCEP = (value) => {
+    value = value.replace(/\D/g, "");
+    value = value.slice(0, 8);
+    if (value.length > 5) {
+      value = value.replace(/^(\d{5})(\d)/, "$1-$2");
+    }
+
+    return value;
   };
 
   return (
@@ -324,14 +369,15 @@ export default function Laboratories() {
                 >
                   <FontAwesomeIcon icon={faEdit} /> Editar
                 </button>
-
-                <button
-                  type="button"
-                  className="lab-remove"
-                  onClick={() => requestLabRemoval(lab)}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
+                <Tooltip content="Remover">
+                  <button
+                    type="button"
+                    className="lab-remove"
+                    onClick={() => requestLabRemoval(lab)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </Tooltip>
               </div>
             </div>
           ))}
@@ -414,6 +460,7 @@ export default function Laboratories() {
                       required
                       value={form.cep}
                       onChange={setField("cep")}
+                      inputMode="numeric"
                     />
                     <button type="button" className="btn-cep-search">
                       Buscar
@@ -488,7 +535,7 @@ export default function Laboratories() {
                 </div>
               </div>
 
-              <div className="modal-row single">
+              <div className="modal-row">
                 <div className="field">
                   <label>Status</label>
                   <Select
@@ -506,10 +553,26 @@ export default function Laboratories() {
                     ))}
                   </Select>
                 </div>
+                {isNew && (
+                  <div className="field">
+                    <label>Coordenadas GPS</label>
+                    <input
+                      type="text"
+                      placeholder="Coordenadas"
+                      required
+                      value={form.coordinates}
+                      onChange={setField("coordinates")}
+                    />
+                  </div>
+                )}
               </div>
             </form>
             <div className="modal-actions">
-              <button form="lab-form" type="submit" className="btn-submit-laboratory">
+              <button
+                form="lab-form"
+                type="submit"
+                className="btn-submit-laboratory"
+              >
                 Salvar
               </button>
               <button type="button" className="btn-cancel" onClick={close}>
