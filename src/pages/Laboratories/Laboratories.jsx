@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { useMediaQuery, Select, MenuItem } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -151,6 +151,15 @@ export default function Laboratories() {
     coordinates: "",
   });
 
+  const [previewImg, setPreviewImg] = useState("");
+
+  useEffect(() => {
+    return () => {
+      if (previewImg && previewImg.startsWith("blob:"))
+        URL.revokeObjectURL(previewImg);
+    };
+  }, [previewImg]);
+
   const setField = (key) => (e) => {
     let value = e.target.value;
     if (key === "phone") value = maskPhone(value);
@@ -164,6 +173,14 @@ export default function Laboratories() {
   const onFileChange = (e) => {
     const file = e.target.files?.[0] ?? null;
     setForm((prev) => ({ ...prev, file }));
+
+    if (!file)
+      return;
+
+    if (previewImg && previewImg.startsWith("blob:"))
+      URL.revokeObjectURL(previewImg);
+    const url = URL.createObjectURL(file);
+    setPreviewImg(url);
   };
 
   const onSearchCEP = async () => {
@@ -179,7 +196,10 @@ export default function Laboratories() {
       const data = await res.json();
 
       if (!res.ok || data.erro) {
-        toast.error("Erro", "CEP não encontrado, verifique se o valor informado é válido.");
+        toast.error(
+          "Erro",
+          "CEP não encontrado, verifique se o valor informado é válido.",
+        );
         return;
       }
 
@@ -189,7 +209,7 @@ export default function Laboratories() {
         city: data.localidade || prev.city,
         uf: data.uf || prev.uf,
       }));
-      toast.success("CEP encontrado com sucesso!")
+      toast.success("CEP encontrado com sucesso!");
     } catch {
       toast.error("Erro", "Falha ao buscar CEP");
     } finally {
@@ -214,6 +234,7 @@ export default function Laboratories() {
       file: null,
       coordinates: "",
     });
+    setPreviewImg("");
     setOpenModal(true);
   };
 
@@ -234,6 +255,7 @@ export default function Laboratories() {
       file: null,
       coordinates: lab.coordinates,
     });
+    setPreviewImg("");
     setOpenModal(true);
   };
 
@@ -466,6 +488,9 @@ export default function Laboratories() {
                     e.key === "Enter" || e.key === " " ? onPickFile() : null
                   }
                 >
+                  {previewImg && (
+                    <img className="modal-avatar-preview" src={previewImg} />
+                  )}
                   <span className="modal-avatar-upload">
                     <FontAwesomeIcon icon={faUpload} />
                   </span>
@@ -488,6 +513,7 @@ export default function Laboratories() {
                     required
                     value={form.name}
                     onChange={setField("name")}
+                    maxLength={100}
                   />
                 </div>
                 <div className="field">
@@ -531,6 +557,7 @@ export default function Laboratories() {
                     placeholder="Nome do responsável"
                     value={form.responsible}
                     onChange={setField("responsible")}
+                    maxLength={100}
                   />
                 </div>
               </div>
@@ -543,6 +570,7 @@ export default function Laboratories() {
                     placeholder="Rua, número, complemento"
                     value={form.address}
                     onChange={setField("address")}
+                    maxLength={100}
                   />
                 </div>
               </div>
@@ -555,6 +583,7 @@ export default function Laboratories() {
                     placeholder="Cidade"
                     value={form.city}
                     onChange={setField("city")}
+                    maxLength={100}
                   />
                 </div>
                 <div className="field">
@@ -587,6 +616,7 @@ export default function Laboratories() {
                     required
                     value={form.email}
                     onChange={setField("email")}
+                    maxLength={70}
                   />
                 </div>
               </div>
@@ -615,9 +645,9 @@ export default function Laboratories() {
                     <input
                       type="text"
                       placeholder="Coordenadas"
-                      required
                       value={form.coordinates}
                       onChange={setField("coordinates")}
+                      maxLength={80}
                     />
                   </div>
                 )}
