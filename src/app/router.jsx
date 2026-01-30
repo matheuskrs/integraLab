@@ -2,6 +2,7 @@ import { createBrowserRouter, Outlet } from "react-router-dom";
 import { lazy } from "react";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import RootLayout from "../layouts/RootLayout/RootLayout";
+import UsersLayout from "../layouts/Users/UsersLayout";
 
 const AuthLayout = lazy(() => import("../layouts/Auth/AuthLayout"));
 const LoginPage = lazy(() => import("../pages/Login/LoginPage"));
@@ -34,6 +35,11 @@ export const router = createBrowserRouter([
         path: "/laboratories",
         element: <LaboratoriesLayout />,
         children: [{ index: true, element: <Laboratories /> }],
+      },
+      {
+        path: "/users",
+        element: <UsersLayout />,
+        children: [{ index: true, element: <Users /> }],
       },
     ],
   },

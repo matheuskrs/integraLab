@@ -90,6 +90,12 @@
   color: white;
   padding: 10px;
   font-size: 30px;
+  cursor: pointer;
+  transition: 200ms ease-in-out;
+}
+
+.btn-new-profile-mobile:hover {
+  opacity:0.8;
 }
 
 .modal-form .field {
