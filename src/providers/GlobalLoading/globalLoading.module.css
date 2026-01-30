@@ -1,4 +1,4 @@
-#global-loading {
+.global-loading {
   position: fixed;
   inset: 0;
   background: var(--main-color);
@@ -12,7 +12,7 @@
   transition: 0.3s ease;
 }
 
-#global-loading.hidden {
+.hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;

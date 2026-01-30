@@ -5,13 +5,13 @@ import { faPen, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "../../components/CommonGridCSS/commonGrid.css";
 import Modal from "../../components/Modal/Modal";
 import { useConfirm } from "../../components/ConfirmationDialog/UseConfirm";
-import "./accessManagement.css";
+import styles from "./accessManagement.module.css";
 import { useMediaQuery } from "@mui/material";
 import { Select, MenuItem } from "@mui/material";
 import { useEffect, useMemo, useCallback, useState } from "react";
 import Tooltip from "../../components/Tooltip/Tooltip";
-import { useGlobalLoading } from "../../components/Loading/GlobalLoadingContext";
-import { useToast } from "../../contexts/useToast";
+import { useGlobalLoading } from "../../providers/GlobalLoading/GlobalLoadingContext";
+import { useToast } from "../../providers/Toast/useToast";
 import profileAccessImg from "../../assets/AccessManagement/ProfileAccessImg.png";
 export default function AccessManagement() {
   const [rows, setRows] = useState([]);
@@ -113,7 +113,7 @@ export default function AccessManagement() {
 
           return (
             <span
-              className="status-btn"
+              className={styles["status-btn"]}
               style={{
                 backgroundColor: isActive ? "#24b92b" : "#fd2a2a",
               }}
@@ -237,7 +237,7 @@ export default function AccessManagement() {
         : {
             ...col,
             renderCell: (params) => (
-              <div className="grid-actions">
+              <div className={"grid-actions"}>
                 <Tooltip content="Editar" placement="right" disabled={false}>
                   <button onClick={() => onOpenEdit(params.row)}>
                     <FontAwesomeIcon icon={faPen} />
@@ -245,7 +245,7 @@ export default function AccessManagement() {
                 </Tooltip>
                 <Tooltip content="Remover" placement="right" disabled={false}>
                   <button
-                    className="danger"
+                    className={styles.danger}
                     onClick={() => confirmDelete(params.row)}
                   >
                     <FontAwesomeIcon icon={faTrash} />
@@ -259,15 +259,15 @@ export default function AccessManagement() {
 
   return (
     <div>
-      <div className="header-wrapper">
+      <div className={styles["header-wrapper"]}>
         {!isMobile && (
-          <div className="header-img-wrapper">
+          <div className={styles["header-img-wrapper"]}>
             <img src={profileAccessImg} />
           </div>
         )}
-        <div className="header-content-wrapper">
-          <h1 className="access-title">Perfis de Acesso</h1>
-          <p className="access-subtitle">
+        <div className={styles["header-content-wrapper"]}>
+          <h1 className={styles["access-title"]}>Perfis de Acesso</h1>
+          <p className={styles["access-subtitle"]}>
             Gerencie os perfis e permissões de acesso do sistema
           </p>
         </div>
@@ -276,13 +276,13 @@ export default function AccessManagement() {
         <div className="grid-header-wrapper">
           <input
             type="text"
-            className="access-search"
+            className={styles["access-search"]}
             placeholder="Buscar perfil..."
             name="access-search"
           />
           {!isMobile && (
             <Select
-              className="select-user-state-list"
+              className={styles["select-user-state-list"]}
               size="small"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
@@ -293,7 +293,7 @@ export default function AccessManagement() {
             </Select>
           )}
           {!isMobile && (
-            <button className="btn-new-profile" onClick={onOpenNew}>
+            <button className={styles["btn-new-profile"]} onClick={onOpenNew}>
               Novo perfil
             </button>
           )}
@@ -314,8 +314,8 @@ export default function AccessManagement() {
         />
       </div>
       {isMobile && (
-        <div className="wrapper-btn-new-profile-mobile">
-          <button className="btn-new-profile-mobile" onClick={onOpenNew}>
+        <div className={styles["wrapper-btn-new-profile-mobile"]}>
+          <button className={styles["btn-new-profile-mobile"]} onClick={onOpenNew}>
             <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
@@ -328,8 +328,8 @@ export default function AccessManagement() {
         onClose={() => setOpenModal(false)}
       >
         {(close) => (
-          <form className="modal-form" onSubmit={onSubmitModal}>
-            <div className="field">
+          <form className={styles["modal-form"]} onSubmit={onSubmitModal}>
+            <div className={styles.field}>
               <label>Nome *</label>
               <input
                 type="text"
@@ -340,7 +340,7 @@ export default function AccessManagement() {
                 onChange={(e) => setProfileName(e.target.value)}
               />
             </div>
-            <div className="field">
+            <div className={styles.field}>
               <label>Descrição</label>
               <input
                 type="text"
@@ -350,22 +350,22 @@ export default function AccessManagement() {
                 onChange={(e) => setProfileDescription(e.target.value)}
               />
             </div>
-            <div className="field">
-              <div className="switch-row">
-                <label className="switch">
+            <div className={styles.field}>
+              <div className={styles["switch-row"]}>
+                <label className={styles.switch}>
                   <input
                     type="checkbox"
                     checked={profileStatus}
                     onChange={(e) => setProfileStatus(e.target.checked)}
                   />
-                  <span className="slider" />
+                  <span className={styles.slider} />
                 </label>
-                <span className="switch-label">Ativo</span>
+                <span className={styles["switch-label"]}>Ativo</span>
               </div>
 
-              <div className="permissions-box">
+              <div className={styles["permissions-box"]}>
                 {permissions.map((permission) => (
-                  <label key={permission.id} className="perm-item">
+                  <label key={permission.id} className={styles["perm-item"]}>
                     <input
                       type="checkbox"
                       checked={profilePermissions.includes(permission.id)}
@@ -377,11 +377,11 @@ export default function AccessManagement() {
               </div>
             </div>
 
-            <div className="modal-actions">
-              <button type="submit" className="btn-submit-profile">
+            <div className={styles["modal-actions"]}>
+              <button type="submit" className={styles["btn-submit-profile"]}>
                 Salvar
               </button>
-              <button type="button" className="btn-cancel" onClick={close}>
+              <button type="button" className={styles["btn-cancel"]} onClick={close}>
                 Cancelar
               </button>
             </div>

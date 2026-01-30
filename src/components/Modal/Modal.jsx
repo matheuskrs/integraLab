@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { useState, useEffect, useRef } from "react";
-import "./modal.css";
+import styles from "./modal.module.css";
 
 export default function Modal({ open, title, onClose, children }) {
   const [closing, setClosing] = useState(false);
@@ -48,23 +48,23 @@ export default function Modal({ open, title, onClose, children }) {
 
   return createPortal(
     <div
-      className={`modal-backdrop ${closing ? "closing" : ""}`}
+      className={`${styles["modal-backdrop"]} ${closing ? styles.closing : ""}`}
       onPointerDown={onBackdropPointerDown}
       onPointerUp={onBackdropPointerUp}
     >
       <div
-        className={`modal ${closing ? "closing" : ""}`}
+        className={`${styles.modal} ${closing ? styles.closing : ""}`}
         onAnimationEnd={handleAnimationEnd}
         onPointerDown={(e) => e.stopPropagation()}
       >
-        <header className="modal-header">
+        <header className={styles["modal-header"]}>
           <h2>{title}</h2>
-          <button className="modal-close" onClick={handleClose}>
+          <button className={styles["modal-close"]} onClick={handleClose}>
             x
           </button>
         </header>
 
-        <div className="modal-body">{content}</div>
+        <div className={styles["modal-body"]}>{content}</div>
       </div>
     </div>,
     document.body,

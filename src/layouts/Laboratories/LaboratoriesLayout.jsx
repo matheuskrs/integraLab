@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../../components/Sidebar/Sidebar";
-import './laboratories.css';
+import styles from './laboratories.module.css';
 
 export default function LaboratoriesLayout() {
   return (
-    <div className="laboratories-container">
+    <div className={styles["laboratories-container"]}>
       <Sidebar activePage={"laboratories"}/>
-      <main className="access-main">
+      <main className={styles["access-main"]}>
         <Outlet />
       </main>
     </div>

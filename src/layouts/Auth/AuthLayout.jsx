@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-import "./auth.css";
+import styles from "./auth.module.css";
 
 export default function AuthLayout() {
   return (
-    <div className="auth-container">
+    <div className={styles["auth-container"]}>
       <Outlet />
     </div>
   );

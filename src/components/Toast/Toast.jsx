@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { useToast } from "../../contexts/useToast";
-import "./toast.css";
+import { useToast } from "../../providers/Toast/useToast";
+import styles from "./toast.module.css";
 
 export default function Toast({ id, title, message, type, duration = 300 }) {
   const { removeToast } = useToast();
@@ -16,9 +16,9 @@ export default function Toast({ id, title, message, type, duration = 300 }) {
   }, [duration, close]);
 
   return (
-    <div className={`toast toast-${type} ${leaving ? "leaving" : ""}`}>
+    <div className={`${styles.toast} ${styles[`toast-${type}`]} ${leaving ? styles.leaving : ""}`}>
       {title && <strong>{title}</strong>}
-      <span className="toast-message">{message}</span>
+      <span className={styles["toast-message"]}>{message}</span>
       <button onClick={close}>x</button>
     </div>
   );

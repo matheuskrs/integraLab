@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useGlobalLoading } from "../Loading/GlobalLoadingContext"; 
+import { useGlobalLoading } from "./GlobalLoadingContext";
 
 export function SuspenseGlobalLoadingFallback() {
   const { showLoading, hideLoading } = useGlobalLoading();

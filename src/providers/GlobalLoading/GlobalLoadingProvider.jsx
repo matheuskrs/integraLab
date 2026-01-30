@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import GlobalLoadingOverlay from "./GlobalLoadingOverlay";
-import "./globalLoading.css";
 import { GlobalLoadingContext } from "./GlobalLoadingContext";
 
 export function GlobalLoadingProvider({ children }) {

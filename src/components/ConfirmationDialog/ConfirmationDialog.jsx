@@ -1,5 +1,5 @@
 import Modal from "../Modal/Modal";
-import "./confirmationDialog.css";
+import styles from "./confirmationDialog.module.css";
 
 export default function ConfirmationDialog({
   open,
@@ -28,19 +28,25 @@ export default function ConfirmationDialog({
   return (
     <Modal open={open} title={title} onClose={handleCancel}>
       {(close) => (
-        <div className="confirm-body">
-          <p className="confirm-message">{message}</p>
+        <div className={styles["confirm-body"]}>
+          <p className={styles["confirm-message"]}>{message}</p>
 
-          <div className="confirm-actions">
+          <div className={styles["confirm-actions"]}>
             <button
-              className={`btn ${destructive ? "btn-danger" : "btn-primary"}`}
+              className={`${styles.btn} ${
+                destructive ? styles["btn-danger"] : styles["btn-primary"]
+              }`}
               onClick={handleConfirm}
               disabled={loading}
               autoFocus
             >
               {loading ? "Processando..." : confirmText}
             </button>
-            <button className="btn" onClick={() => close()} disabled={loading}>
+            <button
+              className={styles.btn}
+              onClick={() => close()}
+              disabled={loading}
+            >
               {cancelText}
             </button>
           </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import "./sidebar.css";
+import styles from "./sidebar.module.css";
 import logo from "../../assets/SInLabsLogo.png";
 import miniLogo from "../../assets/SInLabsMiniLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,8 +19,8 @@ import {
   faChartLine,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../contexts/useToast";
-import { useGlobalLoading } from "../Loading/GlobalLoadingContext";
+import { useToast } from "../../providers/Toast/useToast";
+import { useGlobalLoading } from "../../providers/GlobalLoading/GlobalLoadingContext";
 import Tooltip from "../Tooltip/Tooltip";
 
 export default function Sidebar({ activePage }) {
@@ -104,28 +104,28 @@ export default function Sidebar({ activePage }) {
   return (
     <aside
       ref={sidebarRef}
-      className={`sidebar ${collapsed ? "collapsed" : ""}`}
+      className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`}
     >
       <button
-        className="sidebar-toggle"
+        className={styles["sidebar-toggle"]}
         onClick={() => setCollapsed(!collapsed)}
       >
         <FontAwesomeIcon icon={collapsed ? faChevronRight : faChevronLeft} />
       </button>
-      <div className="sidebar-top">
-        <div className="logo-container">
+      <div className={styles["sidebar-top"]}>
+        <div className={styles["logo-container"]}>
           <img
             src={collapsed ? miniLogo : logo}
             alt="SInLabs"
-            className="sidebar-logo"
+            className={styles["sidebar-logo"]}
           />
         </div>
-        <nav className="sidebar-nav">
+        <nav className={styles["sidebar-nav"]}>
           <ul>
             {MENU_ITEMS.map((item) => (
               <li
                 key={item.id}
-                className={activePage === item.id ? "active" : ""}
+                className={activePage === item.id ? styles.active : ""}
                 onClick={() =>
                   activePage !== item.id && handleNavigate(item.path)
                 }
@@ -135,7 +135,7 @@ export default function Sidebar({ activePage }) {
                   placement="right"
                   disabled={!collapsed}
                 >
-                  <span className="menu-item-ref">
+                  <span className={styles["menu-item-ref"]}>
                     <FontAwesomeIcon icon={item.icon} />
                     {!collapsed && item.label}
                   </span>
@@ -146,31 +146,31 @@ export default function Sidebar({ activePage }) {
         </nav>
       </div>
 
-      <div className="sidebar-bottom">
+      <div className={styles["sidebar-bottom"]}>
         <Tooltip
           content="Seu Usuário - Matheus Rodrigues (Administrador)"
           placement="right"
           disabled={!collapsed}
         >
-          <div className="user-info">
-            <FontAwesomeIcon icon={faCircleUser} className="user-avatar" />
+          <div className={styles["user-info"]}>
+            <FontAwesomeIcon icon={faCircleUser} className={styles["user-avatar"]} />
             {!collapsed && (
-              <div className="info-details">
+              <div className={styles["info-details"]}>
                 <span>Administrador</span>
-                <strong className="user-name">Matheus Rodrigues</strong>
+                <strong className={styles["user-name"]}>Matheus Rodrigues</strong>
               </div>
             )}
           </div>
         </Tooltip>
 
         <Tooltip content="Ajuda" placement="right" disabled={!collapsed}>
-          <button className="sidebar-help">
+          <button className={styles["sidebar-help"]}>
             <FontAwesomeIcon icon={faQuestionCircle} /> {!collapsed && "Ajuda"}
           </button>
         </Tooltip>
 
         <Tooltip content="Sair" placement="right" disabled={!collapsed}>
-          <button className="sidebar-logout" onClick={handleLogout}>
+          <button className={styles["sidebar-logout"]} onClick={handleLogout}>
             <FontAwesomeIcon icon={faRightFromBracket} /> {!collapsed && "Sair"}
           </button>
         </Tooltip>

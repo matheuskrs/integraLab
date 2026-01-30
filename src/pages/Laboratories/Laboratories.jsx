@@ -14,10 +14,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import laboratoryImg from "../../assets/Laboratories/laboratoryImg.png";
 import Modal from "../../components/Modal/Modal";
-import "./laboratories.css";
+import styles from "./laboratories.module.css";
 import Tooltip from "../../components/Tooltip/Tooltip";
-import { useGlobalLoading } from "../../components/Loading/GlobalLoadingContext";
-import { useToast } from "../../contexts/useToast";
+import { useGlobalLoading } from "../../providers/GlobalLoading/GlobalLoadingContext";
+import { useToast } from "../../providers/Toast/useToast";
 import { useConfirm } from "../../components/ConfirmationDialog/UseConfirm";
 
 export default function Laboratories() {
@@ -332,27 +332,27 @@ export default function Laboratories() {
 
   return (
     <div>
-      <div className="header-wrapper">
+      <div className={styles["header-wrapper"]}>
         {!isMobile && (
-          <div className="header-img-wrapper">
+          <div className={styles["header-img-wrapper"]}>
             <img src={laboratoryImg} />
           </div>
         )}
-        <div className="header-content-wrapper">
-          <h1 className="laboratories-title">Laboratórios</h1>
-          <p className="laboratories-subtitle">
+        <div className={styles["header-content-wrapper"]}>
+          <h1 className={styles["laboratories-title"]}>Laboratórios</h1>
+          <p className={styles["laboratories-subtitle"]}>
             Gerencie os laboratórios do sistema
           </p>
         </div>
       </div>
 
-      <div className="lab-card-wrapper">
-        <div className="grid-header-wrapper">
-          <div className="search-with-icon">
-            <FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon" />
+      <div className={styles["lab-card-wrapper"]}>
+        <div className={styles["grid-header-wrapper"]}>
+          <div className={styles["search-with-icon"]}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} className={styles["search-icon"]} />
             <input
               type="text"
-              className="laboratories-search"
+              className={styles["laboratories-search"]}
               placeholder="Buscar laboratórios..."
               name="laboratories-search"
             />
@@ -360,7 +360,7 @@ export default function Laboratories() {
 
           {!isMobile && (
             <Select
-              className="select-filter"
+              className={styles["select-filter"]}
               size="small"
               value={cityFilter}
               onChange={(e) => setCityFilter(e.target.value)}
@@ -374,7 +374,7 @@ export default function Laboratories() {
 
           {!isMobile && (
             <Select
-              className="select-filter"
+              className={styles["select-filter"]}
               size="small"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -387,7 +387,7 @@ export default function Laboratories() {
 
           {!isMobile && (
             <button
-              className="btn-new-laboratory"
+              className={styles["btn-new-laboratory"]}
               onClick={onOpenNew}
               type="button"
             >
@@ -396,38 +396,38 @@ export default function Laboratories() {
           )}
         </div>
 
-        <div className="cards-container">
+        <div className={styles["cards-container"]}>
           {laboratories.map((lab) => (
-            <div className="laboratory-card" key={lab.id}>
-              <div className="laboratory-card-top">
-                <div className="laboratory-card-left-icon">
+            <div className={styles["laboratory-card"]} key={lab.id}>
+              <div className={styles["laboratory-card-top"]}>
+                <div className={styles["laboratory-card-left-icon"]}>
                   <FontAwesomeIcon icon={faBuilding} />
                 </div>
 
-                <div className="laboratory-card-main">
-                  <div className="laboratory-card-title-row">
-                    <h3 className="laboratory-name">{lab.name}</h3>
+                <div className={styles["laboratory-card-main"]}>
+                  <div className={styles["laboratory-card-title-row"]}>
+                    <h3 className={styles["laboratory-name"]}>{lab.name}</h3>
                     <span
-                      className="laboratory-status"
+                      className={styles["laboratory-status"]}
                       style={{ backgroundColor: lab.status.color }}
                     >
                       {lab.status.description}
                     </span>
                   </div>
-                  <div className="laboratory-uf">{lab.uf}</div>
+                  <div className={styles["laboratory-uf"]}>{lab.uf}</div>
                 </div>
               </div>
 
-              <div className="laboratory-card-info">
-                <div className="laboratory-info-row">
+              <div className={styles["laboratory-card-info"]}>
+                <div className={styles["laboratory-info-row"]}>
                   <FontAwesomeIcon icon={faLocationDot} />
                   <span>{lab.address}</span>
                 </div>
-                <div className="laboratory-info-row">
+                <div className={styles["laboratory-info-row"]}>
                   <FontAwesomeIcon icon={faPhone} />
                   <span>{lab.phone}</span>
                 </div>
-                <div className="laboratory-info-row">
+                <div className={styles["laboratory-info-row"]}>
                   <FontAwesomeIcon icon={faEnvelope} />
                   <span>{lab.email}</span>
                 </div>
@@ -435,10 +435,10 @@ export default function Laboratories() {
 
               <hr />
 
-              <div className="laboratory-actions">
+              <div className={styles["laboratory-actions"]}>
                 <button
                   type="button"
-                  className="lab-edt-crt"
+                  className={styles["lab-edt-crt"]}
                   onClick={() => onOpenEdit(lab)}
                 >
                   <FontAwesomeIcon icon={faEdit} /> Editar
@@ -446,7 +446,7 @@ export default function Laboratories() {
                 <Tooltip content="Remover">
                   <button
                     type="button"
-                    className="lab-remove"
+                    className={styles["lab-remove"]}
                     onClick={() => requestLabRemoval(lab)}
                   >
                     <FontAwesomeIcon icon={faTrash} />
@@ -459,9 +459,9 @@ export default function Laboratories() {
       </div>
 
       {isMobile && (
-        <div className="wrapper-btn-new-laboratory-mobile">
+        <div className={styles["wrapper-btn-new-laboratory-mobile"]}>
           <button
-            className="btn-new-laboratory-mobile"
+            className={styles["btn-new-laboratory-mobile"]}
             onClick={onOpenNew}
             type="button"
           >
@@ -476,11 +476,11 @@ export default function Laboratories() {
         onClose={() => setOpenModal(false)}
       >
         {(close) => (
-          <div className="wrapper">
-            <form id="lab-form" className="modal-form" onSubmit={onSubmitModal}>
-              <div className="modal-avatar-row">
+          <div className={styles.wrapper}>
+            <form id="lab-form" className={styles["modal-form"]} onSubmit={onSubmitModal}>
+              <div className={styles["modal-avatar-row"]}>
                 <div
-                  className="modal-avatar"
+                  className={styles["modal-avatar"]}
                   onClick={onPickFile}
                   role="button"
                   tabIndex={0}
@@ -489,9 +489,9 @@ export default function Laboratories() {
                   }
                 >
                   {previewImg && (
-                    <img className="modal-avatar-preview" src={previewImg} />
+                    <img className={styles["modal-avatar-preview"]} src={previewImg} />
                   )}
-                  <span className="modal-avatar-upload">
+                  <span className={styles["modal-avatar-upload"]}>
                     <FontAwesomeIcon icon={faUpload} />
                   </span>
                 </div>
@@ -504,8 +504,8 @@ export default function Laboratories() {
                 />
               </div>
 
-              <div className="modal-row">
-                <div className="field">
+              <div className={styles["modal-row"]}>
+                <div className={styles.field}>
                   <label>Nome *</label>
                   <input
                     type="text"
@@ -516,7 +516,7 @@ export default function Laboratories() {
                     maxLength={100}
                   />
                 </div>
-                <div className="field">
+                <div className={styles.field}>
                   <label>CNPJ *</label>
                   <input
                     type="text"
@@ -528,10 +528,10 @@ export default function Laboratories() {
                 </div>
               </div>
 
-              <div className="modal-row">
-                <div className="field">
+              <div className={styles["modal-row"]}>
+                <div className={styles.field}>
                   <label>CEP *</label>
-                  <div className="cep-row">
+                  <div className={styles["cep-row"]}>
                     <input
                       type="text"
                       placeholder="00000-000"
@@ -542,7 +542,7 @@ export default function Laboratories() {
                     />
                     <button
                       type="button"
-                      className="btn-cep-search"
+                      className={styles["btn-cep-search"]}
                       onClick={onSearchCEP}
                     >
                       Buscar
@@ -550,7 +550,7 @@ export default function Laboratories() {
                   </div>
                 </div>
 
-                <div className="field">
+                <div className={styles.field}>
                   <label>Responsável</label>
                   <input
                     type="text"
@@ -562,8 +562,8 @@ export default function Laboratories() {
                 </div>
               </div>
 
-              <div className="modal-row single">
-                <div className="field">
+              <div className={`${styles["modal-row"]} ${styles.single}`}>
+                <div className={styles.field}>
                   <label>Endereço</label>
                   <input
                     type="text"
@@ -575,8 +575,8 @@ export default function Laboratories() {
                 </div>
               </div>
 
-              <div className="modal-row">
-                <div className="field">
+              <div className={styles["modal-row"]}>
+                <div className={styles.field}>
                   <label>Cidade</label>
                   <input
                     type="text"
@@ -586,7 +586,7 @@ export default function Laboratories() {
                     maxLength={100}
                   />
                 </div>
-                <div className="field">
+                <div className={styles.field}>
                   <label>Estado (UF)</label>
                   <input
                     type="text"
@@ -598,8 +598,8 @@ export default function Laboratories() {
                 </div>
               </div>
 
-              <div className="modal-row">
-                <div className="field">
+              <div className={styles["modal-row"]}>
+                <div className={styles.field}>
                   <label>Telefone</label>
                   <input
                     type="text"
@@ -608,7 +608,7 @@ export default function Laboratories() {
                     onChange={setField("phone")}
                   />
                 </div>
-                <div className="field">
+                <div className={styles.field}>
                   <label>Email *</label>
                   <input
                     type="email"
@@ -621,11 +621,11 @@ export default function Laboratories() {
                 </div>
               </div>
 
-              <div className="modal-row">
-                <div className="field">
+              <div className={styles["modal-row"]}>
+                <div className={styles.field}>
                   <label>Status</label>
                   <Select
-                    className="select-modal"
+                    className={styles["select-modal"]}
                     size="small"
                     value={form.statusId}
                     onChange={(e) =>
@@ -640,7 +640,7 @@ export default function Laboratories() {
                   </Select>
                 </div>
                 {isNew && (
-                  <div className="field">
+                  <div className={styles.field}>
                     <label>Coordenadas GPS</label>
                     <input
                       type="text"
@@ -653,15 +653,15 @@ export default function Laboratories() {
                 )}
               </div>
             </form>
-            <div className="modal-actions">
+            <div className={styles["modal-actions"]}>
               <button
                 form="lab-form"
                 type="submit"
-                className="btn-submit-laboratory"
+                className={styles["btn-submit-laboratory"]}
               >
                 Salvar
               </button>
-              <button type="button" className="btn-cancel" onClick={close}>
+              <button type="button" className={styles["btn-cancel"]} onClick={close}>
                 Cancelar
               </button>
             </div>
