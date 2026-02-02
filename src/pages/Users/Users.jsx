@@ -40,7 +40,8 @@ export default function Users() {
             { id: 10, name: "Laboratório Central" },
             { id: 11, name: "Laboratório Minas" },
           ],
-          statuses: [{ id: 1, name: "Ativo", color: "#24b92b" }],
+          // ✅ AGORA é objeto (não array)
+          status: { id: 1, name: "Ativo", color: "#24b92b" },
           lastAccess: "2025-01-15",
         },
         {
@@ -50,7 +51,8 @@ export default function Users() {
           email: "thais.morais@unesp.com.br",
           profile: "Coordenador",
           laboratories: [{ id: 12, name: "Laboratório Norte" }],
-          statuses: [{ id: 2, name: "Inativo", color: "#fd2a2a" }],
+          // ✅ AGORA é objeto (não array)
+          status: { id: 2, name: "Inativo", color: "#fd2a2a" },
           lastAccess: "2025-02-10",
         },
         {
@@ -63,7 +65,8 @@ export default function Users() {
             { id: 11, name: "Laboratório Minas" },
             { id: 13, name: "Laboratório Centro-Oeste" },
           ],
-          statuses: [{ id: 1, name: "Ativo", color: "#24b92b" }],
+          // ✅ AGORA é objeto (não array)
+          status: { id: 1, name: "Ativo", color: "#24b92b" },
           lastAccess: "2025-03-05",
         },
       ]);
@@ -114,12 +117,15 @@ export default function Users() {
         renderCell: (params) => {
           const name = params.row?.name ?? "";
           const avatarUrl = params.row?.avatarUrl ?? "";
+          const disabled = !String(name).trim();
 
           return (
-            <div className={styles.userCell}>
-              <img className={styles.userAvatar} src={avatarUrl} alt={name} />
-              <span className={styles.userName}>{name}</span>
-            </div>
+            <Tooltip content={String(name)} placement="top" disabled={disabled}>
+              <div className={styles.userCell}>
+                <img className={styles.userAvatar} src={avatarUrl} alt={name} />
+                <span className={styles.userName}>{name}</span>
+              </div>
+            </Tooltip>
           );
         },
       },
@@ -128,12 +134,32 @@ export default function Users() {
         headerName: "Email",
         flex: 1,
         minWidth: 220,
+        renderCell: (params) => {
+          const text = String(params.value ?? "");
+          const disabled = !text.trim();
+
+          return (
+            <Tooltip content={text} placement="top" disabled={disabled}>
+              <span>{text}</span>
+            </Tooltip>
+          );
+        },
       },
       {
         field: "profile",
         headerName: "Perfil",
         flex: 1,
         minWidth: 160,
+        renderCell: (params) => {
+          const text = String(params.value ?? "");
+          const disabled = !text.trim();
+
+          return (
+            <Tooltip content={text} placement="top" disabled={disabled}>
+              <span>{text}</span>
+            </Tooltip>
+          );
+        },
       },
       {
         field: "laboratories",
@@ -146,28 +172,43 @@ export default function Users() {
             .map((x) => x?.name)
             .filter(Boolean)
             .join(", ");
-          return <span title={text}>{text}</span>;
+
+          const disabled = !String(text).trim();
+
+          return (
+            <Tooltip content={text} placement="top" disabled={disabled}>
+              <span>{text}</span>
+            </Tooltip>
+          );
         },
       },
       {
-        field: "statuses",
+        field: "status",
         headerName: "Status",
         flex: 0.5,
         minWidth: 100,
         renderCell: (params) => {
+          const s = params.value;
+          const text = String(s?.name ?? "");
+          const disabled = !text.trim();
+
+          if (!s) {
+            return (
+              <Tooltip content="" placement="top" disabled={true}>
+                <span>-</span>
+              </Tooltip>
+            );
+          }
+
           return (
-            <div>
-              {params.value.map((s) => (
-                <span
-                  key={s.id}
-                  className={styles["status-btn"]}
-                  style={{ backgroundColor: s.color }}
-                  title={s.name}
-                >
-                  {s.name}
-                </span>
-              ))}
-            </div>
+            <Tooltip content={text} placement="top" disabled={disabled}>
+              <span
+                className={styles["status-btn"]}
+                style={{ backgroundColor: s.color }}
+              >
+                {text}
+              </span>
+            </Tooltip>
           );
         },
       },
@@ -175,6 +216,16 @@ export default function Users() {
         field: "lastAccess",
         headerName: "Último Acesso",
         minWidth: 140,
+        renderCell: (params) => {
+          const text = String(params.value ?? "");
+          const disabled = !text.trim();
+
+          return (
+            <Tooltip content={text} placement="top" disabled={disabled}>
+              <span>{text}</span>
+            </Tooltip>
+          );
+        },
       },
       {
         field: "actions",
@@ -190,7 +241,7 @@ export default function Users() {
   const mobileColumns = useMemo(
     () => [
       desktopColumns.find((c) => c.field === "name"),
-      desktopColumns.find((c) => c.field === "statuses"),
+      desktopColumns.find((c) => c.field === "status"),
       desktopColumns.find((c) => c.field === "actions"),
     ],
     [desktopColumns],
