@@ -77,12 +77,32 @@ export default function AccessManagement() {
         headerName: "Perfil",
         flex: 1,
         minWidth: isMobile ? 100 : 120,
+        renderCell: (params) => {
+          const text = String(params.value ?? "");
+          const disabled = !text.trim();
+
+          return (
+            <Tooltip content={text} placement="top" disabled={disabled}>
+              <span>{text}</span>
+            </Tooltip>
+          );
+        },
       },
       {
         field: "descricao",
         headerName: "Descrição",
         flex: 1,
         minWidth: 220,
+        renderCell: (params) => {
+          const text = String(params.value ?? "");
+          const disabled = !text.trim();
+
+          return (
+            <Tooltip content={text} placement="top" disabled={disabled}>
+              <span>{text}</span>
+            </Tooltip>
+          );
+        },
       },
       {
         field: "permissions",
@@ -90,10 +110,11 @@ export default function AccessManagement() {
         minWidth: 160,
         renderCell: (params) => {
           const qtd = params.value?.length ?? 0;
+          const text = `${qtd} ${qtd === 1 ? "permissão" : "permissões"}`;
           return (
-            <span>
-              {qtd} {qtd == 1 ? "permissão" : "permissões"}
-            </span>
+            <Tooltip content={text} placement="top" disabled={false}>
+              <span>{text}</span>
+            </Tooltip>
           );
         },
       },
@@ -101,6 +122,15 @@ export default function AccessManagement() {
         field: "dataCriacao",
         headerName: "Data de criação",
         minWidth: 150,
+        renderCell: (params) => {
+          const text = String(params.value ?? "");
+          const disabled = !text.trim();
+          return (
+            <Tooltip content={text} placement="top" disabled={disabled}>
+              <span>{text}</span>
+            </Tooltip>
+          );
+        },
       },
       {
         field: "status",
@@ -108,18 +138,23 @@ export default function AccessManagement() {
         flex: 1,
         minWidth: 80,
         maxWidth: 160,
+        valueFormatter: (value) => (value ? "Ativo" : "Inativo"),
+
         renderCell: (params) => {
           const isActive = Boolean(params.value);
+          const text = isActive ? "Ativo" : "Inativo";
 
           return (
-            <span
-              className={styles["status-btn"]}
-              style={{
-                backgroundColor: isActive ? "#24b92b" : "#fd2a2a",
-              }}
-            >
-              {isActive ? "Ativo" : "Inativo"}
-            </span>
+            <Tooltip content={text} placement="top" disabled={false}>
+              <span
+                className={styles["status-btn"]}
+                style={{
+                  backgroundColor: isActive ? "#24b92b" : "#fd2a2a",
+                }}
+              >
+                {text}
+              </span>
+            </Tooltip>
           );
         },
       },
@@ -219,8 +254,14 @@ export default function AccessManagement() {
       return;
     }
 
-    var mensagem = profileId == 0 ? "Criando perfil de acesso" : "Atualizando perfil de acesso";
-    var mensagemSucesso = profileId == 0 ? "Perfil de acesso criado com sucesso!" : "Perfil de acesso atualizado com sucesso!";
+    var mensagem =
+      profileId == 0
+        ? "Criando perfil de acesso"
+        : "Atualizando perfil de acesso";
+    var mensagemSucesso =
+      profileId == 0
+        ? "Perfil de acesso criado com sucesso!"
+        : "Perfil de acesso atualizado com sucesso!";
     showLoading(mensagem);
     setTimeout(function () {
       setOpenModal(false);
@@ -315,7 +356,10 @@ export default function AccessManagement() {
       </div>
       {isMobile && (
         <div className={styles["wrapper-btn-new-profile-mobile"]}>
-          <button className={styles["btn-new-profile-mobile"]} onClick={onOpenNew}>
+          <button
+            className={styles["btn-new-profile-mobile"]}
+            onClick={onOpenNew}
+          >
             <FontAwesomeIcon icon={faPlus} />
           </button>
         </div>
@@ -381,7 +425,11 @@ export default function AccessManagement() {
               <button type="submit" className={styles["btn-submit-profile"]}>
                 Salvar
               </button>
-              <button type="button" className={styles["btn-cancel"]} onClick={close}>
+              <button
+                type="button"
+                className={styles["btn-cancel"]}
+                onClick={close}
+              >
                 Cancelar
               </button>
             </div>
