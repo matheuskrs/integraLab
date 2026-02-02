@@ -3,6 +3,13 @@
   gap: 30px;
   margin-bottom: 20px;
 }
+
+.header-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .access-title {
   font-size: 32px;
   font-weight: 600;
@@ -92,7 +99,7 @@
 }
 
 .btn-new-profile-mobile:hover {
-  opacity:0.8;
+  opacity: 0.8;
 }
 
 .modal-form .field {

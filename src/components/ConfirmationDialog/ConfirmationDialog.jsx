@@ -1,4 +1,4 @@
-import Modal from "../Modal/Modal";
+import Modal from "~/components/Modal/Modal";
 import styles from "./confirmationDialog.module.css";
 
 export default function ConfirmationDialog({

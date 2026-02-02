@@ -1,11 +1,11 @@
 import styles from "./login.module.css";
-import logo from "../../assets/SInLabsLogo.png";
+import logo from "~/assets/SInLabsLogo.png";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../providers/Toast/useToast";
-import { useGlobalLoading } from "../../providers/GlobalLoading/GlobalLoadingContext";
+import { useToast } from "~/providers/Toast/useToast";
+import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 
 export default function LoginPage() {
   const { showLoading, hideLoading } = useGlobalLoading();

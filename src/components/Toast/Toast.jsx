@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useToast } from "../../providers/Toast/useToast";
+import { useToast } from "~/providers/Toast/useToast";
 import styles from "./toast.module.css";
 
 export default function Toast({ id, title, message, type, duration = 300 }) {

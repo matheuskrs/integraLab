@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./sidebar.module.css";
-import logo from "../../assets/SInLabsLogo.png";
-import miniLogo from "../../assets/SInLabsMiniLogo.png";
+import logo from "~/assets/SInLabsLogo.png";
+import miniLogo from "~/assets/SInLabsMiniLogo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -19,9 +19,9 @@ import {
   faChartLine,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "../../providers/Toast/useToast";
-import { useGlobalLoading } from "../../providers/GlobalLoading/GlobalLoadingContext";
-import Tooltip from "../Tooltip/Tooltip";
+import { useToast } from "~/providers/Toast/useToast";
+import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
+import Tooltip from "~/components/Tooltip/Tooltip";
 
 export default function Sidebar({ activePage }) {
   const [collapsed, setCollapsed] = useState(true);

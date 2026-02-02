@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useNavigation } from "react-router-dom";
-import { useGlobalLoading } from "../../providers/GlobalLoading/GlobalLoadingContext";
+import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 
 const MIN_DURATION = 2500;
 

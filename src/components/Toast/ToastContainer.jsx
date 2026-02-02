@@ -1,4 +1,4 @@
-import { useToast } from "../../providers/Toast/useToast";
+import { useToast } from "~/providers/Toast/useToast";
 import Toast from "./Toast";
 import styles from "./toast.module.css";
 

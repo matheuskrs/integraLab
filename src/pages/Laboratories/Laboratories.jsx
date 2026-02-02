@@ -12,13 +12,13 @@ import {
   faEdit,
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
-import laboratoryImg from "../../assets/Laboratories/laboratoryImg.png";
-import Modal from "../../components/Modal/Modal";
+import laboratoryImg from "~/assets/Laboratories/laboratoryImg.png";
+import Modal from "~/components/Modal/Modal";
 import styles from "./laboratories.module.css";
-import Tooltip from "../../components/Tooltip/Tooltip";
-import { useGlobalLoading } from "../../providers/GlobalLoading/GlobalLoadingContext";
-import { useToast } from "../../providers/Toast/useToast";
-import { useConfirm } from "../../components/ConfirmationDialog/UseConfirm";
+import Tooltip from "~/components/Tooltip/Tooltip";
+import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
+import { useToast } from "~/providers/Toast/useToast";
+import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
 
 export default function Laboratories() {
   const isMobile = useMediaQuery("(max-width:700px)");
