@@ -13,6 +13,8 @@ import Tooltip from "~/components/Tooltip/Tooltip";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import { useToast } from "~/providers/Toast/useToast";
 import profileAccessImg from "~/assets/AccessManagement/ProfileAccessImg.png";
+import {getAccessPermissions, getAccessProfiles } from "~/services/AccessManagement/accessService.api";
+
 export default function AccessManagement() {
   const [rows, setRows] = useState([]);
   const [status, setStatus] = useState(0);
@@ -21,6 +23,7 @@ export default function AccessManagement() {
   const [profileName, setProfileName] = useState("");
   const [profileDescription, setProfileDescription] = useState("");
   const [profileStatus, setProfileStatus] = useState(true);
+  const [permissions, setPermissions] = useState([]);
   const [profilePermissions, setProfilePermissions] = useState([]);
   const { showLoading, hideLoading } = useGlobalLoading();
   const { confirm, ConfirmDialog } = useConfirm();
@@ -28,52 +31,27 @@ export default function AccessManagement() {
   const MAX_NAME_LENGTH = 60;
   const MAX_DESCRIPTION_LENGTH = 200;
 
-  const permissions = useMemo(
-    () => [
-      { id: 1, description: "Gestão de usuários" },
-      { id: 2, description: "Gestão de sistemas" },
-      { id: 3, description: "Feed de notícias" },
-      { id: 4, description: "Gestão de laboratórios" },
-      { id: 5, description: "Downloads" },
-      { id: 6, description: "Gestão de acessos" },
-    ],
-    [],
-  );
+  useEffect(() => {
+    async function loadPermissions() {
+      const data = await getAccessPermissions();
+      setPermissions(data);
+    }
+    loadPermissions();
+  }, []);
 
   useEffect(() => {
-    setRows([
-      {
-        id: 1,
-        perfil: "Administrador",
-        descricao: "Acesso total ao sistema",
-        dataCriacao: "2025-01-15",
-        status: true,
-        permissions: [1, 2, 6],
-      },
-      {
-        id: 2,
-        perfil: "Coordenador",
-        descricao: "Gerencia Laboratórios e usuários",
-        dataCriacao: "2025-02-10",
-        status: true,
-        permissions: [1, 4],
-      },
-      {
-        id: 3,
-        perfil: "Técnico",
-        descricao: "Acesso aos sistemas e downloads",
-        dataCriacao: "2025-03-05",
-        status: false,
-        permissions: [2, 5],
-      },
-    ]);
+    async function loadProfiles() {
+      const data = await getAccessProfiles();
+      setRows(data);
+    }
+    loadProfiles();
   }, []);
 
   const isMobile = useMediaQuery("(max-width:700px)");
   const desktopColumns = useMemo(
     () => [
       {
-        field: "perfil",
+        field: "name",
         headerName: "Perfil",
         flex: 1,
         minWidth: isMobile ? 100 : 120,
@@ -89,7 +67,7 @@ export default function AccessManagement() {
         },
       },
       {
-        field: "descricao",
+        field: "description",
         headerName: "Descrição",
         flex: 1,
         minWidth: 220,
@@ -119,7 +97,7 @@ export default function AccessManagement() {
         },
       },
       {
-        field: "dataCriacao",
+        field: "creationDate",
         headerName: "Data de criação",
         minWidth: 150,
         renderCell: (params) => {
@@ -189,8 +167,8 @@ export default function AccessManagement() {
 
   const onOpenEdit = useCallback((row) => {
     setProfileId(row.id);
-    setProfileName(row.perfil || "");
-    setProfileDescription(row.descricao || "");
+    setProfileName(row.name || "");
+    setProfileDescription(row.description || "");
     setProfileStatus(Boolean(row.status));
     setProfilePermissions(row.permissions || []);
     setOpenModal(true);
@@ -201,7 +179,7 @@ export default function AccessManagement() {
       try {
         const ok = await confirm({
           title: "Excluir",
-          message: `Tem certeza que deseja excluir o perfil "${row.perfil}"?`,
+          message: `Tem certeza que deseja excluir o perfil "${row.name}"?`,
         });
         if (!ok) return;
 

@@ -17,115 +17,51 @@ import { DataGrid } from "@mui/x-data-grid";
 import { ptBR } from "@mui/x-data-grid/locales";
 import Modal from "~/components/Modal/Modal.jsx";
 import "~/components/CommonGridCSS/commonGrid.css";
-import Avatar from "~/assets/Users/Avatar.jpg";
-import Avatar1 from "~/assets/Users/Avatar1.jpg";
-import Avatar2 from "~/assets/Users/Avatar2.jpg";
+import { getUsers, getUserStatus } from "../../services/Users/usersService.api";
+import { getAccessProfiles } from "../../services/AccessManagement/accessService.api";
+import { getLaboratories } from "../../services/Laboratories/laboratoriesService.api";
 
 export default function Users() {
   const [rows, setRows] = useState([]);
+  const [profileOptions, setProfileOptions] = useState([]);
+  const [headerLaboratoryOptions, setLaboratories] = useState([]);
+  const [userStatusOptions, setUserStatusOptions] = useState([]);
   const [profileFilter, setProfileFilter] = useState(0);
   const [laboratoryFilter, setLaboratoryFilter] = useState(0);
   const [statusFilter, setStatusFilter] = useState(0);
   const [openModal, setOpenModal] = useState(false);
   const [userId, setUserId] = useState(0);
-
   const { showLoading, hideLoading } = useGlobalLoading();
   const { confirm, ConfirmDialog } = useConfirm();
   const toast = useToast();
-
   const isMobile = useMediaQuery("(max-width:700px)");
-
-  useEffect(() => {
-    const load = async () => {
-      setRows([
-        {
-          id: 1,
-          name: "Camila Alves",
-          avatarUrl: Avatar,
-          email: "camila.alves@unesp.com.br",
-          profile: "Administrador",
-          laboratories: [
-            { id: 10, name: "Laboratório Central" },
-            { id: 11, name: "Laboratório Minas" },
-          ],
-          status: { id: 1, name: "Ativo", color: "#24b92b" },
-          lastAccess: "2025-01-15",
-        },
-        {
-          id: 2,
-          name: "Thais Morais",
-          avatarUrl: Avatar1,
-          email: "thais.morais@unesp.com.br",
-          profile: "Coordenador",
-          laboratories: [{ id: 12, name: "Laboratório Norte" }],
-          status: { id: 2, name: "Inativo", color: "#fd2a2a" },
-          lastAccess: "2025-02-10",
-        },
-        {
-          id: 3,
-          name: "Ana Antunes",
-          avatarUrl: Avatar2,
-          email: "ana.antunes@unesp.com.br",
-          profile: "Técnico",
-          laboratories: [
-            { id: 11, name: "Laboratório Minas" },
-            { id: 13, name: "Laboratório Centro-Oeste" },
-          ],
-          status: { id: 1, name: "Ativo", color: "#24b92b" },
-          lastAccess: "2025-03-05",
-        },
-      ]);
-    };
-    load();
-  }, []);
-
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const profileOptions = useMemo(
-    () => [
-      { id: 1, name: "Administrador" },
-      { id: 2, name: "Coordenador" },
-      { id: 3, name: "Técnico" },
-    ],
-    [],
-  );
+  useEffect(() => {
+    async function loadUsers() {
+      const data = await getUsers();
+      setRows(data);
+    }
+    loadUsers();
 
-  const userStatusOptions = useMemo(
-    () => [
-      { id: 1, name: "Ativo" },
-      { id: 2, name: "Inativo" },
-    ],
-    [],
-  );
+    async function loadProfiles() {
+      const data = await getAccessProfiles();
+      setProfileOptions(data);
+    }
+    loadProfiles();
 
-  const headerProfileOptions = useMemo(
-    () => [
-      { id: 1, name: "Administrador" },
-      { id: 2, name: "Técnico" },
-      { id: 3, name: "Coordenador" },
-    ],
-    [],
-  );
+    async function loadUserStatus() {
+      const data = await getUserStatus();
+      setUserStatusOptions(data);
+    }
+    loadUserStatus();
 
-  const headerLaboratoryOptions = useMemo(
-    () => [
-      { id: 1, name: "Laboratório Central" },
-      { id: 2, name: "Laboratório Norte" },
-      { id: 3, name: "Laboratório Minas" },
-      { id: 4, name: "Laboratório Sul" },
-      { id: 5, name: "Laboratório Nordeste" },
-      { id: 6, name: "Laboratório Centro-Oeste" },
-    ],
-    [],
-  );
-
-  const headerStatusOptions = useMemo(
-    () => [
-      { id: 1, name: "Ativo" },
-      { id: 2, name: "Inativo" },
-    ],
-    [],
-  );
+    async function loadLaboratories() {
+      const data = await getLaboratories();
+      setLaboratories(data);
+    }
+    loadLaboratories();
+  }, []);
 
   const fileRef = useRef(null);
 
@@ -534,7 +470,7 @@ export default function Users() {
                 onChange={(e) => setProfileFilter(e.target.value)}
               >
                 <MenuItem value={0}>Todos os perfis</MenuItem>
-                {headerProfileOptions.map((p) => (
+                {profileOptions.map((p) => (
                   <MenuItem key={p.id} value={p.id}>
                     {p.name}
                   </MenuItem>
@@ -568,7 +504,7 @@ export default function Users() {
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
                 <MenuItem value={0}>Todos os status</MenuItem>
-                {headerStatusOptions.map((s) => (
+                {userStatusOptions.map((s) => (
                   <MenuItem key={s.id} value={s.id}>
                     {s.name}
                   </MenuItem>
