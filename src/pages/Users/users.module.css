@@ -14,6 +14,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 20px;
 }
 
 .access-title,
@@ -47,12 +48,14 @@
 }
 
 .select-user-state-list {
+  flex: 1 1 0%;
+  min-width: 0;
+  max-width: 300px;
   border-radius: 6px;
   font-size: 14px;
-  flex: 1;
   color: gray;
-  max-width: 300px;
   border: 2px solid #ddd;
+  background: #fff;
 }
 
 .select-user-state-list * {
@@ -66,11 +69,11 @@
   color: white;
   border: none;
   padding: 13px 14px;
-  min-width: 90px;
+  min-width: 150px;
   white-space: nowrap;
-  flex: 0.3;
   cursor: pointer;
   transition: 200ms ease-in-out;
+  flex: 0 0 auto;
 }
 
 .btn-new-profile:hover,
@@ -81,7 +84,7 @@
 .wrapper-btn-new-profile-mobile,
 .wrapper-btn-new-user-mobile {
   position: absolute;
-  bottom: 15px;
+  bottom: 25px;
   right: 15px;
 }
 
@@ -104,10 +107,11 @@
 
 .status-btn {
   color: #fff;
-  font-weight: 600;
-  font-size: 13px;
+  font-weight: 700;
+  font-size: 12px;
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: 7px;
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -143,10 +147,50 @@
   color: #fd2a2a;
 }
 
+.wrapper .modal-form {
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 120, 120, 0.45) transparent;
+  overscroll-behavior: contain;
+}
+
+.wrapper .modal-form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.wrapper .modal-form::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 999px;
+}
+
+.wrapper .modal-form::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 120, 0.35);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.wrapper .modal-form::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 120, 120, 0.55);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.wrapper .modal-form::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.wrapper .modal-actions {
+  padding-top: 10px;
+}
+
 .modal-form .field {
   display: flex;
   flex-direction: column;
   padding-bottom: 10px;
+  min-width: 0;
 }
 
 .modal-form .field input {
@@ -162,6 +206,20 @@
 
 .modal-form .field input:focus {
   border-color: var(--main-color);
+}
+
+.modal-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.modal-row.single {
+  grid-template-columns: 1fr;
+}
+
+.select-modal {
+  width: 100%;
 }
 
 .modal-actions {
@@ -198,57 +256,54 @@
   color: var(--main-color);
 }
 
-.switch-row {
+.modal-avatar-row {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 16px;
+}
+
+.modal-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--main-color);
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.switch-label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.switch {
-  position: relative;
-  width: 46px;
-  height: 24px;
+  justify-content: center;
   cursor: pointer;
+  user-select: none;
 }
 
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+.modal-avatar-upload {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--main-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  z-index: 2;
 }
 
-.slider {
+.modal-avatar-preview {
   position: absolute;
   inset: 0;
-  background: #cfcfcf;
-  border-radius: 999px;
-  transition: 0.2s;
-}
-
-.slider:before {
-  content: "";
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  top: 3px;
-  left: 3px;
-  background: #fff;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  transition: 0.2s;
+  object-fit: cover;
+  z-index: 1;
 }
 
-.switch input:checked + .slider {
-  background: var(--main-color);
-}
-
-.switch input:checked + .slider:before {
-  transform: translateX(22px);
+.modal-avatar-upload svg {
+  font-size: 14px;
+  color: white;
 }
 
 .permissions-box {
@@ -269,6 +324,10 @@
 
 @media (max-width: 700px) {
   .permissions-box {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-row {
     grid-template-columns: 1fr;
   }
 }

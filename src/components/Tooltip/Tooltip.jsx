@@ -4,7 +4,7 @@ export default function Tooltip({ content, children, disabled }) {
   if (disabled) return children;
 
   return (
-    <TooltipPrimitive.Root delayDuration={200}>
+    <TooltipPrimitive.Root delayDuration={200} disableHoverableContent>
       <TooltipPrimitive.Trigger asChild>
         {children}
       </TooltipPrimitive.Trigger>
