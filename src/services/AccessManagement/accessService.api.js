@@ -34,11 +34,11 @@ export async function getAccessProfiles() {
 
 export async function getAccessPermissions() {
   return [
-    { id: 1, description: "Gestão de usuários" },
-    { id: 2, description: "Gestão de sistemas" },
-    { id: 3, description: "Feed de notícias" },
-    { id: 4, description: "Gestão de laboratórios" },
-    { id: 5, description: "Downloads" },
-    { id: 6, description: "Gestão de acessos" },
+    { id: 1, name: "Gestão de usuários" },
+    { id: 2, name: "Gestão de sistemas" },
+    { id: 3, name: "Feed de notícias" },
+    { id: 4, name: "Gestão de laboratórios" },
+    { id: 5, name: "Downloads" },
+    { id: 6, name: "Gestão de acessos" },
   ];
 }

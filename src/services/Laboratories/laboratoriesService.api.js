@@ -96,3 +96,10 @@ export async function getLaboratories() {
     },
   ];
 }
+
+export async function getLaboratoryStatus() {
+  return [
+    { id: 1, name: "Ativo" },
+    { id: 2, name: "Inativo" },
+  ];
+}

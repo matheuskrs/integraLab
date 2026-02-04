@@ -1,15 +1,9 @@
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useMediaQuery, Select, MenuItem } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
   faPlus,
-  faBuilding,
-  faLocationDot,
-  faPhone,
-  faEnvelope,
-  faTrash,
-  faEdit,
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import laboratoryImg from "~/assets/Laboratories/laboratoryImg.png";
@@ -19,7 +13,11 @@ import Tooltip from "~/components/Tooltip/Tooltip";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import { useToast } from "~/providers/Toast/useToast";
 import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
-import { getLaboratories } from "../../services/Laboratories/laboratoriesService.api";
+import {
+  getLaboratories,
+  getLaboratoryStatus,
+} from "../../services/Laboratories/laboratoriesService.api";
+import LaboratoryCard from "../../components/LaboratoryCard/LaboratoryCard";
 
 export default function Laboratories() {
   const isMobile = useMediaQuery("(max-width:700px)");
@@ -32,25 +30,26 @@ export default function Laboratories() {
   const { confirm, ConfirmDialog } = useConfirm();
   const [isNew, setIsNew] = useState(true);
   const [laboratories, setLaboratories] = useState([]);
+  const [statusOptions, setStatusOptions] = useState([]);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   useEffect(() => {
-    async function loadLaboratories(){
+    async function loadLaboratories() {
       const data = await getLaboratories();
       setLaboratories(data);
     }
     loadLaboratories();
-  }, [])
-  const statusOptions = useMemo(
-    () => [
-      { id: 1, description: "Ativo" },
-      { id: 2, description: "Inativo" },
-    ],
-    [],
-  );
+  }, []);
+
+  useEffect(() => {
+    async function loadLabStatus() {
+      const data = await getLaboratoryStatus();
+      setStatusOptions(data);
+    }
+    loadLabStatus();
+  }, []);
 
   const fileRef = useRef(null);
-
   const [form, setForm] = useState({
     name: "",
     cnpj: "",
@@ -89,8 +88,7 @@ export default function Laboratories() {
     const file = e.target.files?.[0] ?? null;
     setForm((prev) => ({ ...prev, file }));
 
-    if (!file)
-      return;
+    if (!file) return;
 
     if (previewImg && previewImg.startsWith("blob:"))
       URL.revokeObjectURL(previewImg);
@@ -264,7 +262,10 @@ export default function Laboratories() {
       <div className={styles["lab-card-wrapper"]}>
         <div className={styles["grid-header-wrapper"]}>
           <div className={styles["search-with-icon"]}>
-            <FontAwesomeIcon icon={faMagnifyingGlass} className={styles["search-icon"]} />
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              className={styles["search-icon"]}
+            />
             <input
               type="text"
               className={styles["laboratories-search"]}
@@ -313,62 +314,7 @@ export default function Laboratories() {
 
         <div className={styles["cards-container"]}>
           {laboratories.map((lab) => (
-            <div className={styles["laboratory-card"]} key={lab.id}>
-              <div className={styles["laboratory-card-top"]}>
-                <div className={styles["laboratory-card-left-icon"]}>
-                  <FontAwesomeIcon icon={faBuilding} />
-                </div>
-
-                <div className={styles["laboratory-card-main"]}>
-                  <div className={styles["laboratory-card-title-row"]}>
-                    <h3 className={styles["laboratory-name"]}>{lab.name}</h3>
-                    <span
-                      className={styles["laboratory-status"]}
-                      style={{ backgroundColor: lab.status.color }}
-                    >
-                      {lab.status.description}
-                    </span>
-                  </div>
-                  <div className={styles["laboratory-uf"]}>{lab.uf}</div>
-                </div>
-              </div>
-
-              <div className={styles["laboratory-card-info"]}>
-                <div className={styles["laboratory-info-row"]}>
-                  <FontAwesomeIcon icon={faLocationDot} />
-                  <span>{lab.address}</span>
-                </div>
-                <div className={styles["laboratory-info-row"]}>
-                  <FontAwesomeIcon icon={faPhone} />
-                  <span>{lab.phone}</span>
-                </div>
-                <div className={styles["laboratory-info-row"]}>
-                  <FontAwesomeIcon icon={faEnvelope} />
-                  <span>{lab.email}</span>
-                </div>
-              </div>
-
-              <hr />
-
-              <div className={styles["laboratory-actions"]}>
-                <button
-                  type="button"
-                  className={styles["lab-edt-crt"]}
-                  onClick={() => onOpenEdit(lab)}
-                >
-                  <FontAwesomeIcon icon={faEdit} /> Editar
-                </button>
-                <Tooltip content="Remover">
-                  <button
-                    type="button"
-                    className={styles["lab-remove"]}
-                    onClick={() => requestLabRemoval(lab)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
-                </Tooltip>
-              </div>
-            </div>
+            <LaboratoryCard key={lab.id} lab={lab} onEdit={onOpenEdit} onRemove={requestLabRemoval}/>
           ))}
         </div>
       </div>
@@ -392,7 +338,11 @@ export default function Laboratories() {
       >
         {(close) => (
           <div className={styles.wrapper}>
-            <form id="lab-form" className={styles["modal-form"]} onSubmit={onSubmitModal}>
+            <form
+              id="lab-form"
+              className={styles["modal-form"]}
+              onSubmit={onSubmitModal}
+            >
               <div className={styles["modal-avatar-row"]}>
                 <div
                   className={styles["modal-avatar"]}
@@ -404,7 +354,10 @@ export default function Laboratories() {
                   }
                 >
                   {previewImg && (
-                    <img className={styles["modal-avatar-preview"]} src={previewImg} />
+                    <img
+                      className={styles["modal-avatar-preview"]}
+                      src={previewImg}
+                    />
                   )}
                   <span className={styles["modal-avatar-upload"]}>
                     <FontAwesomeIcon icon={faUpload} />
@@ -549,7 +502,7 @@ export default function Laboratories() {
                   >
                     {statusOptions.map((s) => (
                       <MenuItem key={s.id} value={s.id}>
-                        {s.description}
+                        {s.name}
                       </MenuItem>
                     ))}
                   </Select>
@@ -576,7 +529,11 @@ export default function Laboratories() {
               >
                 Salvar
               </button>
-              <button type="button" className={styles["btn-cancel"]} onClick={close}>
+              <button
+                type="button"
+                className={styles["btn-cancel"]}
+                onClick={close}
+              >
                 Cancelar
               </button>
             </div>

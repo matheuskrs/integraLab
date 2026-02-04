@@ -149,7 +149,7 @@ export default function AccessManagement() {
 
   const mobileColumns = useMemo(
     () => [
-      desktopColumns.find((col) => col.field === "perfil"),
+      desktopColumns.find((col) => col.field === "name"),
       desktopColumns.find((col) => col.field === "status"),
       desktopColumns.find((col) => col.field === "actions"),
     ],
@@ -393,7 +393,7 @@ export default function AccessManagement() {
                       checked={profilePermissions.includes(permission.id)}
                       onChange={() => togglePermission(permission)}
                     />
-                    {permission.description}
+                    {permission.name}
                   </label>
                 ))}
               </div>
