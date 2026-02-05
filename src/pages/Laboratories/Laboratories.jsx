@@ -32,6 +32,10 @@ export default function Laboratories() {
   const [laboratories, setLaboratories] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
 
+  const [searchFilter, setSearchFilter] = useState("");
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(1);
+
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   useEffect(() => {
     async function loadLaboratories() {
@@ -39,15 +43,17 @@ export default function Laboratories() {
       setLaboratories(data);
     }
     loadLaboratories();
-  }, []);
 
-  useEffect(() => {
     async function loadLabStatus() {
       const data = await getLaboratoryStatus();
       setStatusOptions(data);
     }
     loadLabStatus();
   }, []);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchFilter, cityFilter, statusFilter, pageSize]);
 
   const fileRef = useRef(null);
   const [form, setForm] = useState({
@@ -243,6 +249,33 @@ export default function Laboratories() {
     return value;
   };
 
+  const filteredLaboratories = laboratories.filter((lab) => {
+    const term = (searchFilter || "").trim().toLowerCase();
+    const matchSearch =
+      !term ||
+      (lab.name || "").toLowerCase().includes(term) ||
+      (lab.cnpj || "").toLowerCase().includes(term) ||
+      (lab.city || "").toLowerCase().includes(term) ||
+      (lab.uf || "").toLowerCase().includes(term);
+
+    const matchCity = cityFilter === 0 ? true : true;
+    const matchStatus = statusFilter === 0 ? true : true;
+
+    return matchSearch && matchCity && matchStatus;
+  });
+
+  const totalItems = filteredLaboratories.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const startIndex = (safePage - 1) * pageSize;
+  const pagedLaboratories = filteredLaboratories.slice(
+    startIndex,
+    startIndex + pageSize,
+  );
+  const showingFrom = totalItems === 0 ? 0 : startIndex + 1;
+  const showingTo = Math.min(startIndex + pagedLaboratories.length, totalItems);
+  const showingText = `Mostrando ${showingFrom} a ${showingTo} de ${totalItems} laboratórios`;
+
   return (
     <div>
       <div className={styles["header-wrapper"]}>
@@ -271,6 +304,8 @@ export default function Laboratories() {
               className={styles["laboratories-search"]}
               placeholder="Buscar laboratórios..."
               name="laboratories-search"
+              value={searchFilter}
+              onChange={(e) => setSearchFilter(e.target.value)}
             />
           </div>
 
@@ -313,9 +348,33 @@ export default function Laboratories() {
         </div>
 
         <div className={styles["cards-container"]}>
-          {laboratories.map((lab) => (
-            <LaboratoryCard key={lab.id} lab={lab} onEdit={onOpenEdit} onRemove={requestLabRemoval}/>
+          {pagedLaboratories.map((lab) => (
+            <LaboratoryCard
+              key={lab.id}
+              lab={lab}
+              onEdit={onOpenEdit}
+              onRemove={requestLabRemoval}
+            />
           ))}
+        </div>
+
+        <div className={styles["pagination-wrapper"]}>
+          <div className={styles["pagination-left"]}>
+            Itens por página:
+            <Select
+              size="small"
+              value={pageSize}
+              onChange={(e) => setPageSize(e.target.value)}
+            >
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+            </Select>
+          </div>
+          {showingText && (
+            <span className={styles["pagination-text"]}>{showingText}</span>
+          )}
         </div>
       </div>
 

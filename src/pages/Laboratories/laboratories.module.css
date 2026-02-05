@@ -20,6 +20,8 @@
   border: 1px solid rgba(230, 230, 230, 0.7);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   max-width: 2000px;
+  max-height: 650px;
+  overflow-y: auto;
 }
 .laboratories-title {
   font-size: 32px;
@@ -75,6 +77,32 @@
 .select-filter * {
   border: none !important;
 }
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0 0 0;
+  border-top: 1px solid rgba(230, 230, 230, 0.7);
+  margin-top: 12px;
+  flex-wrap:wrap;
+}
+
+.pagination-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.pagination-text{
+  overflow:hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .btn-new-laboratory {
   background: var(--main-color);
   border-radius: 5px;
