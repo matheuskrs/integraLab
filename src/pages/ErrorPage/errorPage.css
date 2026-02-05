@@ -1,4 +1,4 @@
-*{
+* {
   user-select: none;
 }
 
@@ -10,6 +10,7 @@
   justify-content: center;
   text-align: center;
   gap: 12px;
+  padding: 10px;
 }
 
 .notfound-container h1 {

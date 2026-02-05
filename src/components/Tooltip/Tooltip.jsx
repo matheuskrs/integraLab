@@ -16,7 +16,6 @@ export default function Tooltip({ content, children, disabled }) {
           onClick={(e) => {
             if (!isMobile) return;
             e.preventDefault();
-            e.stopPropagation();
             setOpen((prev) => !prev);
           }}
         >
