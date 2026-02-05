@@ -18,7 +18,7 @@
   background: #fff;
   border-radius: 8px;
   width: 95%;
-  max-height: 650px;
+  max-height: 700px;
   max-width: 520px;
   animation: modalIn 0.25s ease-in-out;
   overflow-y: auto;
@@ -37,7 +37,7 @@
 }
 
 .modal-body {
-  padding: 16px;
+  padding: 16px 4px 16px 16px;
 }
 
 .modal-close {

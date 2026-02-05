@@ -160,40 +160,16 @@
 .laboratories-container .modal-body {
   padding-right: 0;
 }
+
 .wrapper .modal-form {
-  max-height: 450px;
-  overflow-y: auto;
-  padding-right: 20px;
-}
-.wrapper .modal-form {
-  max-height: 450px;
+  max-height: 550px;
   overflow-y: auto;
   padding-right: 20px;
   scrollbar-width: thin;
   scrollbar-color: rgba(120, 120, 120, 0.45) transparent;
   overscroll-behavior: contain;
 }
-.wrapper .modal-form::-webkit-scrollbar {
-  width: 8px;
-}
-.wrapper .modal-form::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 999px;
-}
-.wrapper .modal-form::-webkit-scrollbar-thumb {
-  background: rgba(120, 120, 120, 0.35);
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-.wrapper .modal-form::-webkit-scrollbar-thumb:hover {
-  background: rgba(120, 120, 120, 0.55);
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-.wrapper .modal-form::-webkit-scrollbar-corner {
-  background: transparent;
-}
+
 .wrapper .modal-actions {
   padding-top: 10px;
 }
