@@ -7,10 +7,12 @@ import {
   faTrash,
   faEdit,
 } from "@fortawesome/free-solid-svg-icons";
+import { useMediaQuery } from "@mui/material";
 import Tooltip from "~/components/Tooltip/Tooltip";
 import styles from "./laboratoryCard.module.css";
 
 export default function LaboratoryCard({ lab, onEdit, onRemove }) {
+  const isMobile = useMediaQuery("(max-width:700px)");
   return (
     <div className={styles["laboratory-card"]}>
       <div className={styles["laboratory-card-top"]}>
@@ -20,7 +22,11 @@ export default function LaboratoryCard({ lab, onEdit, onRemove }) {
 
         <div className={styles["laboratory-card-main"]}>
           <div className={styles["laboratory-card-title-row"]}>
-            <h3 className={styles["laboratory-name"]}>{lab.name}</h3>
+            <div className={styles["laboratory-name"]}>
+              <Tooltip content={lab.name} disabled={!isMobile}>
+                <h3>{lab.name}</h3>
+              </Tooltip>
+            </div>
             <span
               className={styles["laboratory-status"]}
               style={{ backgroundColor: lab.status?.color ?? "#999" }}
