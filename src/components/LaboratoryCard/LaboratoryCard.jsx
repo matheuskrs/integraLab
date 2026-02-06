@@ -49,7 +49,7 @@ export default function LaboratoryCard({ lab, onEdit, onRemove }) {
         </div>
         <div className={styles["laboratory-info-row"]}>
           <FontAwesomeIcon icon={faEnvelope} />
-          <span>{lab.email}</span>
+          <span className={styles["lab-card-email"]}>{lab.email}</span>
         </div>
       </div>
 

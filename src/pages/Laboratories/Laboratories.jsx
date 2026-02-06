@@ -9,7 +9,6 @@ import {
 import laboratoryImg from "~/assets/Laboratories/laboratoryImg.png";
 import Modal from "~/components/Modal/Modal";
 import styles from "./laboratories.module.css";
-import Tooltip from "~/components/Tooltip/Tooltip";
 import { useGlobalLoading } from "~/providers/GlobalLoading/GlobalLoadingContext";
 import { useToast } from "~/providers/Toast/useToast";
 import { useConfirm } from "~/components/ConfirmationDialog/UseConfirm";
@@ -31,7 +30,6 @@ export default function Laboratories() {
   const [isNew, setIsNew] = useState(true);
   const [laboratories, setLaboratories] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
-
   const [searchFilter, setSearchFilter] = useState("");
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
@@ -348,14 +346,24 @@ export default function Laboratories() {
         </div>
 
         <div className={styles["cards-container"]}>
-          {pagedLaboratories.map((lab) => (
-            <LaboratoryCard
-              key={lab.id}
-              lab={lab}
-              onEdit={onOpenEdit}
-              onRemove={requestLabRemoval}
-            />
-          ))}
+          {pagedLaboratories.length === 0 ? (
+            <div className={styles["empty-state"]}>
+              <h3>Nenhum laboratório encontrado</h3>
+              <p>
+                Ainda não há laboratórios cadastrados
+                {searchFilter ? " para esse filtro" : ""}. Clique em <strong>Novo laboratório</strong> para adicionar o primeiro.
+              </p>
+            </div>
+          ) : (
+            pagedLaboratories.map((lab) => (
+              <LaboratoryCard
+                key={lab.id}
+                lab={lab}
+                onEdit={onOpenEdit}
+                onRemove={requestLabRemoval}
+              />
+            ))
+          )}
         </div>
 
         <div className={styles["pagination-wrapper"]}>

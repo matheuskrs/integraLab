@@ -1,0 +1,9 @@
+.systems-container {
+    padding: 40px 0px 0px 120px;
+}
+
+@media (max-width: 700px) {
+  .systems-container {
+    padding: 40px 0px 0px 100px;
+  }
+}

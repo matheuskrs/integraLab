@@ -80,6 +80,11 @@
   font-size: 14px;
   color: var(--tertiary-color-text);
 }
+
+.lab-card-email{
+  word-break: break-all;
+}
+
 .laboratory-actions {
   display: flex;
   justify-content: space-between;

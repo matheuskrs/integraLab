@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
 import ErrorPage from "~/pages/ErrorPage/ErrorPage";
 import RootLayout from "~/layouts/RootLayout/RootLayout";
@@ -11,6 +11,8 @@ const LaboratoriesLayout = lazy(() => import("~/layouts/Laboratories/Laboratorie
 const Laboratories = lazy(() => import("~/pages/Laboratories/Laboratories"));
 const UsersLayout = lazy(() => import("~/layouts/Users/UsersLayout"));
 const Users = lazy(() => import("~/pages/Users/Users"));
+const SystemsLayout = lazy(() => import("~/layouts/Systems/SystemsLayout"));
+const Systems = lazy(() => import("~/pages/Systems/Systems"));
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +37,11 @@ export const router = createBrowserRouter([
         path: "/users",
         element: <UsersLayout />,
         children: [{ index: true, element: <Users /> }],
+      },
+      {
+        path: "/systems",
+        element: <SystemsLayout />,
+        children: [{ index: true, element: <Systems /> }],
       },
     ],
   },

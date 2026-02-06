@@ -49,7 +49,12 @@ export default function Sidebar({ activePage }) {
       icon: faBuilding,
       path: "/laboratories",
     },
-    { id: "sistemas", label: "Sistemas", icon: faBox, path: "/sistemas" },
+    { 
+      id: "systems",
+      label: "Sistemas",
+      icon: faBox,
+      path: "/systems"
+    },
     {
       id: "association",
       label: "Associação",
@@ -62,7 +67,12 @@ export default function Sidebar({ activePage }) {
       icon: faDownload,
       path: "/downloads",
     },
-    { id: "feed", label: "Feed de notícias", icon: faNewspaper, path: "/feed" },
+    { 
+      id: "feed",
+      label: "Feed de notícias",
+      icon: faNewspaper,
+      path: "/feed"
+    },
     {
       id: "management",
       label: "Gestão de Acessos",
@@ -153,11 +163,16 @@ export default function Sidebar({ activePage }) {
           disabled={!collapsed}
         >
           <div className={styles["user-info"]}>
-            <FontAwesomeIcon icon={faCircleUser} className={styles["user-avatar"]} />
+            <FontAwesomeIcon
+              icon={faCircleUser}
+              className={styles["user-avatar"]}
+            />
             {!collapsed && (
               <div className={styles["info-details"]}>
                 <span>Administrador</span>
-                <strong className={styles["user-name"]}>Matheus Rodrigues</strong>
+                <strong className={styles["user-name"]}>
+                  Matheus Rodrigues
+                </strong>
               </div>
             )}
           </div>
